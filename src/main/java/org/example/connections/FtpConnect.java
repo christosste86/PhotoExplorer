@@ -6,11 +6,21 @@ import org.apache.commons.net.ftp.FTPClient;
 import java.io.IOException;
 
 public class FtpConnect {
-    public static void main(String[] args) {
-        String server = "192.168.0.198"; // Replace with your server
-        int port = 2221; // FTP port
-        String user = "christos"; // Replace with your username
-        String pass = "android"; // Replace with your password
+
+    private String server;
+    private int port;// FTP port
+    private String user; // Replace with your username
+    private String pass; // Replace with your password
+
+    public FtpConnect(String server, int port, String user, String pass) {
+        this.server = server;
+        this.port = port;
+        this.user = user;
+        this.pass = pass;
+        connect();
+    }
+
+    public void connect() {
 
         FTPClient ftpClient = new FTPClient();
         try {
@@ -23,9 +33,9 @@ public class FtpConnect {
             // List files in the directory
             String[] files = ftpClient.listNames();
             if (files != null && files.length > 0) {
-                System.out.println("Files:");
+                //System.out.println("Files:");
                 for (String file : files) {
-                    System.out.println(file);
+                    //System.out.println(file);
                 }
             } else {
                 System.out.println("No files found.");

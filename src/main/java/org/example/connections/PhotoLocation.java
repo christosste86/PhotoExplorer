@@ -8,8 +8,30 @@ import java.io.File;
 import java.util.Optional;
 
 public class PhotoLocation {
-    public static void main(String[] args) {
-        File imageFile = new File("U:\\BackUp\\Photos\\2024\\Spring\\okres Brno-město\\3.24(33)_Brno_Vídeňská.jpg"); // Replace with your image path
+
+    private String imagePath;
+    private long latitude;
+    private long longitude;
+
+    public PhotoLocation(String imagePath) {
+        this.imagePath = imagePath;
+        getLatLong();
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public long getLatitude() {
+        return latitude;
+    }
+
+    public long getLongitude() {
+        return longitude;
+    }
+
+    public void getLatLong() {
+        File imageFile = new File(this.imagePath); // Replace with your image path
 
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
@@ -20,8 +42,8 @@ public class PhotoLocation {
                 double latitude = directory.getGeoLocation().getLatitude();
                 double longitude = directory.getGeoLocation().getLongitude();
 
-                System.out.println("Latitude: " + latitude);
-                System.out.println("Longitude: " + longitude);
+                //System.out.println("Latitude: " + latitude);
+                //System.out.println("Longitude: " + longitude);
             } else {
                 System.out.println("No GPS data found in image.");
             }
