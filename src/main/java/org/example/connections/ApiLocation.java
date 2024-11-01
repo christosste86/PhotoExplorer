@@ -12,7 +12,7 @@ public class ApiLocation {
     //https://geocode.maps.co/reverse?lat=latitude&lon=longitude&api_key=672494c88b52e639833548cvjf55303
 
     public static void main(String[] args) {
-        String url = "https://geocode.maps.co/reverse?lat=49.190810&lon=16.594300&api_key=672494c88b52e639833548cvjf55303"; // Replace with your API endpoint
+        String url = "https://geocode.maps.co/reverse?lat=49.176538&lon=16.597093972222222&api_key=672494c88b52e639833548cvjf55303"; // Replace with your API endpoint
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet request = new HttpGet(url);
