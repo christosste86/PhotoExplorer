@@ -14,9 +14,11 @@ public class Main {
         ApiLocation geocode = new ApiLocation();
         motorolaPhone.getPhotoFiles().forEach(img -> {
             PhotoLocation photoDetails = new PhotoLocation(img.toString());
-            geocode.setLatitude(photoDetails.getLatitude());
-            geocode.setLongitude(photoDetails.getLongitude());
-            geocode.generateLocation();
+            if(photoDetails.getLatitude() > 0) {
+                geocode.setLatitude(photoDetails.getLatitude());
+                geocode.setLongitude(photoDetails.getLongitude());
+                geocode.generateLocation();
+            }
         });
     }
 }

@@ -33,7 +33,7 @@ public class PhotoExplorer {
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (isImageFile(file)) {
                         photoFiles.add(file);
-                        System.out.println("File: " + file.toString());
+                        //System.out.println("File: " + file.toString());
                     }
 
                     return FileVisitResult.CONTINUE; // Continue traversing

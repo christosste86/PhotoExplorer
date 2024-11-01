@@ -10,8 +10,8 @@ import java.util.Optional;
 public class PhotoLocation {
 
     private String imagePath;
-    private long latitude;
-    private long longitude;
+    private double latitude;
+    private double longitude;
 
     public PhotoLocation(String imagePath) {
         this.imagePath = imagePath;
@@ -22,11 +22,11 @@ public class PhotoLocation {
         this.imagePath = imagePath;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public long getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -39,8 +39,8 @@ public class PhotoLocation {
 
             if (gpsDirectory.isPresent()) {
                 GpsDirectory directory = gpsDirectory.get();
-                double latitude = directory.getGeoLocation().getLatitude();
-                double longitude = directory.getGeoLocation().getLongitude();
+                this.latitude = directory.getGeoLocation().getLatitude();
+                this.longitude = directory.getGeoLocation().getLongitude();
 
                 //System.out.println("Latitude: " + latitude);
                 //System.out.println("Longitude: " + longitude);
