@@ -41,7 +41,7 @@ public class PhotoExplorer {
 
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                    System.out.println("Entering directory: " + dir.toString());
+                    //System.out.println("Entering directory: " + dir.toString());
                     return FileVisitResult.CONTINUE; // Continue traversing
                 }
 
