@@ -21,4 +21,14 @@ public class Main {
             }
         });
     }
+
+    public static void getPhotoLocation( ApiLocation geocode, PhotoLocation photoDetails){
+        geocode.setLatitude(photoDetails.getLatitude());
+        geocode.setLongitude(photoDetails.getLongitude());
+        geocode.generateLocation();
+    }
+
+    public static void sendToMySqlLocationAndPathDetails(){
+
+    }
 }
