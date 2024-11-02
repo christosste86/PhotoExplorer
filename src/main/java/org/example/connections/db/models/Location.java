@@ -1,19 +1,17 @@
 package org.example.connections.db.models;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-
+@Entity
+@Table(name = "Locations")
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
-    private String path;
-
+    private double latitude;
+    private double longitude;
     private String country_code;
     private String country;
     private String postcode;
@@ -37,12 +35,20 @@ public class Location {
         this.id = id;
     }
 
-    public String getPath() {
-        return path;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getCountry_code() {
@@ -137,7 +143,8 @@ public class Location {
     public String toString() {
         return "Location{" +
                 "id=" + id +
-                ", path='" + path + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", country_code='" + country_code + '\'' +
                 ", country='" + country + '\'' +
                 ", postcode='" + postcode + '\'' +
