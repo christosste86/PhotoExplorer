@@ -19,6 +19,7 @@ public class Location {
     private String county;
     private String municipality;
     private String city;
+    private String village;
     private String suburb;
     private String road;
     private String house_number;
@@ -33,6 +34,10 @@ public class Location {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
     }
 
     public double getLatitude() {
