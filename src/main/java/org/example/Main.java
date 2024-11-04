@@ -1,15 +1,11 @@
 package org.example;
 
 import org.example.connections.ApiLocation;
-import org.example.connections.FtpConnect;
 import org.example.connections.PhotoExplorer;
-import org.example.connections.PhotoLocation;
+import org.example.connections.photos.PhotoDetails;
 import org.example.connections.db.daos.GenericDao;
 import org.example.connections.db.models.Location;
 import org.example.connections.db.services.GenericService;
-import org.example.connections.db.util.HibernateUtil;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,8 +15,8 @@ public class Main {
 
 //        FtpConnect motorolaConnect = new FtpConnect("192.168.0.198",2221, "christos", "android");
         PhotoExplorer motorolaPhone = new PhotoExplorer("Z:\\BackUp\\Photos\\2024\\Spring");
-        motorolaPhone.getPhotoFiles().forEach(img -> {
-            PhotoLocation photoDetails = new PhotoLocation(img.toString());
+        motorolaPhone.getPhotoFilesList().forEach(img -> {
+            PhotoDetails photoDetails = new PhotoDetails(img.toString());
             if(photoDetails.getLatitude() > 0) {
                 System.out.println(photoDetails.getLatitude());
                 System.out.println(photoDetails.getLongitude());
