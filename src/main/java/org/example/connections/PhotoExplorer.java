@@ -21,11 +21,11 @@ public class PhotoExplorer {
         getPhotoPaths();
     }
 
-    public List<Path> getPhotoFiles() {
+    public List<Path> getPhotoFilesList() {
         return photoFiles;
     }
 
-    public void getPhotoPaths() {
+    private void getPhotoPaths() {
         Path startPath = Paths.get(directory); // Replace with your directory
         try {
             Files.walkFileTree(startPath, new SimpleFileVisitor<Path>() {
