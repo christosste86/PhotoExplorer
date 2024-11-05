@@ -41,9 +41,6 @@ public class PhotoLocation {
                 GpsDirectory directory = gpsDirectory.get();
                 this.latitude = directory.getGeoLocation().getLatitude();
                 this.longitude = directory.getGeoLocation().getLongitude();
-
-                //System.out.println("Latitude: " + latitude);
-                //System.out.println("Longitude: " + longitude);
             } else {
                 System.out.println("No GPS data found in image.");
             }

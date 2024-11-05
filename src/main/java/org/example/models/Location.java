@@ -1,6 +1,8 @@
-package org.example.connections.db.models;
+package org.example.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Locations")
@@ -25,7 +27,15 @@ public class Location {
     private String house_number;
     private String shop;
 
+    @OneToMany(mappedBy = "location")
+    private List<Photo> photos = new ArrayList<>();
+
     public Location() {
+    }
+
+    public void setPhoto(Photo photo){
+        photos.add(photo);
+        photo.setLocation(this);
     }
 
     public long getId() {

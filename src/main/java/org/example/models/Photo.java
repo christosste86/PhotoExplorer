@@ -1,4 +1,4 @@
-package org.example.connections.db.models;
+package org.example.models;
 
 import javax.persistence.*;
 
@@ -18,8 +18,18 @@ public class Photo {
     private String bodySerialNumber;
     private String dateTime;
     private String hostComputer;
+    private double latitude;
+    private double longitude;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 
     public Photo() {
+    }
+
+    public void setLocation(Location location){
+        this.location = location;
     }
 
     public void setWidth(int width) {
@@ -56,6 +66,14 @@ public class Photo {
 
     public void setHostComputer(String hostComputer) {
         this.hostComputer = hostComputer;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     @Override

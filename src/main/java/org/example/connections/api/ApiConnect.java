@@ -5,15 +5,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 
 import java.io.IOException;
 
-public class ApiHttpConnection {
+public class ApiConnect {
     private String url;
     private String jsonString;
 
-    public ApiHttpConnection(String url) {
+    public ApiConnect(String url) {
         this.url = url;
         this.jsonString = jsonString();
     }
