@@ -13,7 +13,7 @@ public class Main {
 
 //        FtpConnect motorolaConnect = new FtpConnect("192.168.0.198",2221, "christos", "android");
         Path myPhotoPath = Path.of("U:\\BackUp\\Photos\\2024\\Spring\\okres Brno-město\\3.24(33)_Brno_Vídeňská.jpg");
-        PhotoService myPhoto = new PhotoService(myPhotoPath);
         LocationServices myPhotoLocation = new LocationServices(myPhotoPath);
+        myPhotoLocation.saveToDBAndGetObject();
     }
 }
