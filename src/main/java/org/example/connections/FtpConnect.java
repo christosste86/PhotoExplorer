@@ -4,6 +4,9 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 
 public class FtpConnect {
 
@@ -18,7 +21,6 @@ public class FtpConnect {
         this.port = port;
         this.user = user;
         this.pass = pass;
-        connect();
     }
 
     public void connect() {
@@ -63,6 +65,24 @@ public class FtpConnect {
             return ftpClient.changeWorkingDirectory(path);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public boolean createDirectory(boolean workingDirectory, String directoryName){
+        try {
+            return this.ftpClient.makeDirectory(directoryName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Path ftpPath(String folder) {
+        String ftpUrl = "ftp://username:password@ftp.example.com/path/to/folder";
+        try {
+            URI uri = new URI(ftpUrl);
+            return Path.of(uri.getPath());
+        } catch (URISyntaxException e) {
+            return Path.of("");
         }
     }
 }
