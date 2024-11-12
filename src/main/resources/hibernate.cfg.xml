@@ -12,7 +12,7 @@
 
         <!-- Hibernate settings -->
         <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
-        <property name="hibernate.hbm2ddl.auto">create-drop</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
         <mapping package="org.example" />
         <mapping class="org.example.models.Location" />
         <mapping class="org.example.models.Photo" />
