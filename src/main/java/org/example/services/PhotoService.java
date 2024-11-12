@@ -5,6 +5,7 @@ import org.example.models.Photo;
 import org.example.connections.db.services.GenericService;
 import org.example.connections.photos.PhotoData;
 import java.nio.file.Path;
+import java.util.List;
 
 public class PhotoService {
     private GenericDao<Photo, Long> photoDao = new GenericDao<>(Photo.class);
@@ -22,7 +23,24 @@ public class PhotoService {
 
     //save photoObject to DB table
     public void saveToDB(){
-        photoService.save(this.photoObject);
+        if(!isDuplicateObjectInDB()){
+            photoService.save(this.photoObject);
+        }
+
+    }
+
+    private boolean isDuplicateObjectInDB(){
+        if(filteredListByPath().isEmpty()){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    private List<Photo> filteredListByPath(){
+        return photoService.getAll()
+                .stream()
+                .filter(o->o.getImagePath().equals(photoObject.getImagePath())).toList();
     }
 
     //delete photoObject from DB table
