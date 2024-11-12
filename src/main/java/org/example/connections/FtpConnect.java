@@ -11,6 +11,7 @@ public class FtpConnect {
     private int port;// FTP port
     private String user; // Replace with your username
     private String pass; // Replace with your password
+    private FTPClient ftpClient = new FTPClient();
 
     public FtpConnect(String server, int port, String user, String pass) {
         this.server = server;
@@ -21,38 +22,47 @@ public class FtpConnect {
     }
 
     public void connect() {
-
-        FTPClient ftpClient = new FTPClient();
         try {
-            // Connect to the FTP server
-            ftpClient.connect(server, port);
-            ftpClient.login(user, pass);
-            ftpClient.enterLocalPassiveMode();
-            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            this.ftpClient.connect(server, port);
+            this.ftpClient.login(user, pass);
+            this.ftpClient.enterLocalPassiveMode();
+            this.ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-            // List files in the directory
-            String[] files = ftpClient.listNames();
-            if (files != null && files.length > 0) {
-                //System.out.println("Files:");
-                for (String file : files) {
-                    //System.out.println(file);
-                }
-            } else {
-                System.out.println("No files found.");
+    public void listFiles(){
+        String[] files = null;
+        try {
+            files = this.ftpClient.listNames();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if (files != null && files.length > 0) {
+            System.out.println("Files:");
+            for (String file : files) {
+                System.out.println(file);
             }
+        } else {
+            System.out.println("No files found.");
+        }
+    }
 
-            // Logout and disconnect
-            ftpClient.logout();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                if (ftpClient.isConnected()) {
-                    ftpClient.disconnect();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+    public void disconnect(){
+        try {
+            this.ftpClient.logout();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean workingDirectory(String path){
+        try {
+            this.ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            return ftpClient.changeWorkingDirectory(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
