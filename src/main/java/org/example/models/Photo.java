@@ -4,6 +4,9 @@ import org.example.connections.db.services.GenericService;
 import org.example.services.LocationServices;
 
 import javax.persistence.*;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Photos")
@@ -12,14 +15,14 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String imagePath;
+    private Path imagePath;
     private int width;
     private int height;
     private String cameraModel;
     private String ownerName;
     private String Artist;
     private String bodySerialNumber;
-    private String dateTime;
+    private LocalDateTime dateTime;
     private String hostComputer;
     private double latitude;
     private double longitude;
@@ -31,7 +34,35 @@ public class Photo {
     public Photo() {
     }
 
-    public String getImagePath() {
+    public long getId() {
+        return id;
+    }
+
+    public String getCameraModel() {
+        return cameraModel;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public String getArtist() {
+        return Artist;
+    }
+
+    public String getBodySerialNumber() {
+        return bodySerialNumber;
+    }
+
+    public String getHostComputer() {
+        return hostComputer;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public Path getImagePath() {
         return imagePath;
     }
 
@@ -55,7 +86,7 @@ public class Photo {
         this.height = height;
     }
 
-    public void setImagePath(String imagePath) {
+    public void setImagePath(Path imagePath) {
         this.imagePath = imagePath;
     }
 
@@ -75,7 +106,7 @@ public class Photo {
         this.bodySerialNumber = bodySerialNumber;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

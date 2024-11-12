@@ -1,4 +1,4 @@
-package org.example.connections.photos;
+package org.example.connections.metadata;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -11,12 +11,17 @@ import com.drew.metadata.jpeg.JpegDirectory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
-public class PhotoData {
+public class ImgMetadata {
 
     private String imagePath;
 
-    public PhotoData(String imagePath) {
+    public ImgMetadata(String imagePath) {
         this.imagePath = imagePath;
     }
 
@@ -119,25 +124,35 @@ public class PhotoData {
         }
     }
 
-    public String getDateTimeOriginal(){
+    public LocalDateTime  getDateTimeOriginal(){
         if(exifIFD0Directory().containsTag(ExifIFD0Directory.TAG_DATETIME_ORIGINAL)) {
-            return exifIFD0Directory().getString(ExifIFD0Directory.TAG_DATETIME_ORIGINAL);
+            Date date = exifIFD0Directory().getDate(ExifIFD0Directory.TAG_DATETIME_ORIGINAL);
+            return date.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
         }else{
             return null;
         }
     }
 
-    public String getDateTime(){
+
+    public LocalDateTime getDateTime(){
         if(exifIFD0Directory().containsTag(ExifIFD0Directory.TAG_DATETIME)) {
-            return exifIFD0Directory().getString(ExifIFD0Directory.TAG_DATETIME);
+            Date date = exifIFD0Directory().getDate(ExifIFD0Directory.TAG_DATETIME);
+            return date.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
         }else{
             return null;
         }
     }
 
-    public String getDateTimeDigital(){
+    public LocalDateTime getDateTimeDigital(){
         if(exifIFD0Directory().containsTag(ExifIFD0Directory.TAG_DATETIME_DIGITIZED)) {
-            return exifIFD0Directory().getString(ExifIFD0Directory.TAG_DATETIME_DIGITIZED);
+            Date date = exifIFD0Directory().getDate(ExifIFD0Directory.TAG_DATETIME_DIGITIZED);
+            return date.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
         }else{
             return null;
         }

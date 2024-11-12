@@ -1,8 +1,6 @@
 package org.example.models;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "Locations")
@@ -16,8 +14,8 @@ public class Location {
     private double longitude;
     private String country_code;
     private String country;
-    private String postcode;
     private String state;
+    private String postcode;
     private String county;
     private String municipality;
     private String city;
@@ -26,137 +24,143 @@ public class Location {
     private String road;
     private String house_number;
     private String shop;
+    private String tourism;
 
-    @OneToMany(mappedBy = "location")
-    private List<Photo> photos = new ArrayList<>();
+//    @OneToMany(mappedBy = "location")
+//    private List<Photo> photos = new ArrayList<>();
 
     public Location() {
     }
 
-    public void setPhoto(Photo photo){
-        photos.add(photo);
-        photo.setLocation(this);
-    }
+//    public void setPhoto(Photo photo){
+//        photos.add(photo);
+//        photo.setLocation(this);
+//    }
 
     public long getId() {
         return id;
-    }
-
-    public String getVillage() {
-        return village;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setVillage(String village) {
-        this.village = village;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getCountry_code() {
-        return country_code;
-    }
-
-    public void setCountry_code(String country_code) {
-        this.country_code = country_code;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-    public String getState() {
-        return state;
     }
 
     public void setState(String state) {
         this.state = state;
     }
 
-    public String getCounty() {
-        return county;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setCounty(String county) {
-        this.county = county;
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getCountry_code() {
+        return country_code;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public String getCounty() {
+        return county;
     }
 
     public String getMunicipality() {
         return municipality;
     }
 
-    public void setMunicipality(String municipality) {
-        this.municipality = municipality;
-    }
-
     public String getCity() {
         return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public String getSuburb() {
         return suburb;
     }
 
-    public void setSuburb(String suburb) {
-        this.suburb = suburb;
-    }
-
     public String getRoad() {
         return road;
-    }
-
-    public void setRoad(String road) {
-        this.road = road;
     }
 
     public String getHouse_number() {
         return house_number;
     }
 
-    public void setHouse_number(String house_number) {
-        this.house_number = house_number;
-    }
-
     public String getShop() {
         return shop;
+    }
+
+    public String getTourism() {
+        return tourism;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setTourism(String tourism) {
+        this.tourism = tourism;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setCountry_code(String country_code) {
+        this.country_code = country_code;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public void setMunicipality(String municipality) {
+        this.municipality = municipality;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setSuburb(String suburb) {
+        this.suburb = suburb;
+    }
+
+    public void setRoad(String road) {
+        this.road = road;
+    }
+
+    public void setHouse_number(String house_number) {
+        this.house_number = house_number;
     }
 
     public void setShop(String shop) {
         this.shop = shop;
     }
+
 
     @Override
     public String toString() {
@@ -166,15 +170,17 @@ public class Location {
                 ", longitude=" + longitude +
                 ", country_code='" + country_code + '\'' +
                 ", country='" + country + '\'' +
-                ", postcode='" + postcode + '\'' +
                 ", state='" + state + '\'' +
+                ", postcode='" + postcode + '\'' +
                 ", county='" + county + '\'' +
                 ", municipality='" + municipality + '\'' +
                 ", city='" + city + '\'' +
+                ", village='" + village + '\'' +
                 ", suburb='" + suburb + '\'' +
                 ", road='" + road + '\'' +
                 ", house_number='" + house_number + '\'' +
                 ", shop='" + shop + '\'' +
+                ", tourism='" + tourism + '\'' +
                 '}';
     }
 }

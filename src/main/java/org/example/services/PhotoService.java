@@ -3,7 +3,7 @@ package org.example.services;
 import org.example.connections.db.daos.GenericDao;
 import org.example.models.Photo;
 import org.example.connections.db.services.GenericService;
-import org.example.connections.photos.PhotoData;
+import org.example.connections.metadata.ImgMetadata;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class PhotoService {
 
     //call PhotoService with path and create photo Object
     public PhotoService(Path photoPath) {
-        this.photoObject = createPhotoObjectFromPath(photoPath);
+        createPhotoObjectFromPath(photoPath);
     }
 
     public Photo getPhotoObject() {
@@ -59,25 +59,19 @@ public class PhotoService {
     }
 
     //create photoObject from photo path
-    private Photo createPhotoObjectFromPath(Path photoPath){
-        PhotoData photoData = new PhotoData(photoPath.toString());
-        Photo photoObject = new Photo();
-        photoObject.setLongitude(photoData.getLongitude());
-        photoObject.setLatitude(photoData.getLatitude());
-        photoObject.setImagePath(photoData.getPath().toString());
-        photoObject.setWidth(photoData.getWidth());
-        photoObject.setHeight(photoData.getHeight());
-        photoObject.setCameraModel(photoData.getCameraOwner());
-        photoObject.setOwnerName(photoData.getCameraOwner());
-        photoObject.setArtist(photoData.getArtist());
-        photoObject.setBodySerialNumber(photoData.getBodySerialNumber());
-        photoObject.setDateTime(photoData.getDateTime());
-        photoObject.setHostComputer(photoData.getHostname());
-        return photoObject;
-    }
-
-    private boolean checkDuplicatePhotoObject(){
-        return false;
+    private void createPhotoObjectFromPath(Path photoPath){
+        ImgMetadata photoData = new ImgMetadata(photoPath.toString());
+        this.photoObject.setLongitude(photoData.getLongitude());
+        this.photoObject.setLatitude(photoData.getLatitude());
+        this.photoObject.setImagePath(photoData.getPath());
+        this.photoObject.setWidth(photoData.getWidth());
+        this.photoObject.setHeight(photoData.getHeight());
+        this.photoObject.setCameraModel(photoData.getModel());
+        this.photoObject.setOwnerName(photoData.getCameraOwner());
+        this.photoObject.setArtist(photoData.getArtist());
+        this.photoObject.setBodySerialNumber(photoData.getBodySerialNumber());
+        this.photoObject.setDateTime(photoData.getDateTime());
+        this.photoObject.setHostComputer(photoData.getHostname());
     }
 
 }
