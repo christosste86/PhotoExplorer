@@ -3,7 +3,7 @@ package org.example.services;
 import org.example.connections.db.daos.GenericDao;
 import org.example.models.Photo;
 import org.example.connections.db.services.GenericService;
-import org.example.connections.photos.PhotoData;
+import org.example.connections.metadata.ImgMetadata;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class PhotoService {
 
     //create photoObject from photo path
     private Photo createPhotoObjectFromPath(Path photoPath){
-        PhotoData photoData = new PhotoData(photoPath.toString());
+        ImgMetadata photoData = new ImgMetadata(photoPath.toString());
         Photo photoObject = new Photo();
         photoObject.setLongitude(photoData.getLongitude());
         photoObject.setLatitude(photoData.getLatitude());
