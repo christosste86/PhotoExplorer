@@ -12,7 +12,7 @@ public class GeocodeService {
 
     private final String apiKey = "672494c88b52e639833548cvjf55303";
     private ApiConnect geocode;
-    private Location location = new Location();
+    private Location locationObject;
 
 
     public GeocodeService() {
@@ -22,12 +22,13 @@ public class GeocodeService {
         this.latitude = latitude;
         this.longitude = longitude;
         String url = String.format("https://geocode.maps.co/reverse?lat=%s&lon=%s&api_key=%s", this.latitude, this.longitude, this.apiKey);
+        System.out.println(url);
         this.geocode = new ApiConnect(url);
         addApiAddressToLocationObject();
     }
 
-    public Location getLocation() {
-        return location;
+    public Location getLocationObject() {
+        return locationObject;
     }
 
     private JSONObject locationObject() {
@@ -53,71 +54,85 @@ public class GeocodeService {
             setState(key);
             setPostcode(key);
             setCountry(key);
+            setTourism(key);
+            setCountryCod(key);
         }
-        this.location.setLatitude(this.latitude);
-        this.location.setLongitude(this.longitude);
+        this.locationObject.setLatitude(this.latitude);
+        this.locationObject.setLongitude(this.longitude);
     }
+
+    private void setCountryCod(String key) {
+        if (key.equals("country_code")) {
+            this.locationObject.setCountry_code(addressObject().get(key).toString());
+        }
+    }
+
+    private void setTourism(String key){
+        if (key.equals("tourism")) {
+            this.locationObject.setTourism(addressObject().get(key).toString());
+        }
+    }
+
     private void setShop(String key){
         if (key.equals("shop")) {
-            this.location.setShop(addressObject().get(key).toString());
+            this.locationObject.setShop(addressObject().get(key).toString());
         }
     }
     private void setHouseNumber(String key){
         if (key.equals("house_number")) {
-            location.setHouse_number(addressObject().get(key).toString());
+            this.locationObject.setHouse_number(addressObject().get(key).toString());
         }
     }
 
     private void setRoad(String key){
         if (key.equals("road")) {
-            location.setRoad(addressObject().get(key).toString());
+            this.locationObject.setRoad(addressObject().get(key).toString());
         }
     }
 
     private void setSuburb(String key){
         if (key.equals("suburb")) {
-            location.setSuburb(addressObject().get(key).toString());
+            this.locationObject.setSuburb(addressObject().get(key).toString());
         }
     }
     private void setVillage(String key){
         if (key.equals("village")) {
-            location.setVillage(addressObject().get(key).toString());
+            this.locationObject.setVillage(addressObject().get(key).toString());
         }
     }
 
     private void setCity(String key){
-        if (key.equals("city") || key.equals("town")) {
-            location.setCity(addressObject().get(key).toString());
+        if (key.equals("city")) {
+            this.locationObject.setCity(addressObject().get(key).toString());
         }
     }
 
     private void setMunicipality(String key){
         if (key.equals("municipality")) {
-            location.setMunicipality(addressObject().get(key).toString());
+            this.locationObject.setMunicipality(addressObject().get(key).toString());
         }
     }
 
     private void setCounty(String key){
         if (key.equals("county")) {
-            location.setCounty(addressObject().get(key).toString());
+            this.locationObject.setCounty(addressObject().get(key).toString());
         }
     }
 
     private void setState(String key){
         if (key.equals("state")) {
-            location.setState(addressObject().get(key).toString());
+            this.locationObject.setState(addressObject().get(key).toString());
         }
     }
     private void setCountry(String key){
         if (key.equals("country_code")) {
-            location.setCountry_code(addressObject().get(key).toString());
+            this.locationObject.setCountry(addressObject().get(key).toString());
         }
     }
     private void setPostcode(String key){
         if (key.equals("postcode")) {
-            location.setPostcode(addressObject().get(key).toString());
+            this.locationObject.setPostcode(addressObject().get(key).toString());
         }
     }
-
 }
 
