@@ -1,11 +1,17 @@
 package org.example.connections.db.daos;
 
 import org.example.connections.db.util.HibernateUtil;
+import org.example.models.Location;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.List;
 
 public class GenericDao <T, ID extends Serializable> {
     private final Class<T> entityType;
@@ -41,6 +47,16 @@ public class GenericDao <T, ID extends Serializable> {
             Transaction transaction = session.beginTransaction();
             session.delete(entity);
             transaction.commit();
+        }
+    }
+
+    public List<T> getAll(){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityType);
+            Root<T> genericRoot =  criteriaQuery.from(entityType);
+            criteriaQuery.select(genericRoot);
+            return session.createQuery(criteriaQuery).getResultList();
         }
     }
 }

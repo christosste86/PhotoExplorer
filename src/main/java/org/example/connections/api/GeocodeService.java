@@ -12,8 +12,7 @@ public class GeocodeService {
 
     private final String apiKey = "672494c88b52e639833548cvjf55303";
     private ApiConnect geocode;
-    private LocationServices locationServices;
-    private Location location;
+    private Location location = new Location();
 
 
     public GeocodeService() {
@@ -23,9 +22,12 @@ public class GeocodeService {
         this.latitude = latitude;
         this.longitude = longitude;
         String url = String.format("https://geocode.maps.co/reverse?lat=%s&lon=%s&api_key=%s", this.latitude, this.longitude, this.apiKey);
-        System.out.println(url);
         this.geocode = new ApiConnect(url);
-        this.location = createLocationObject();
+        addApiAddressToLocationObject();
+    }
+
+    public Location getLocation() {
+        return location;
     }
 
     private JSONObject locationObject() {
@@ -36,20 +38,7 @@ public class GeocodeService {
         return locationObject().getJSONObject("address");
     }
 
-
-    private Location createLocationObject() {
-        Location locationObject = new Location();
-        addApiAddressToLocationObject(locationObject);
-        addCoordinatesToLocationObjects(locationObject);
-        return locationObject;
-    }
-
-    private void addCoordinatesToLocationObjects(Location location) {
-        location.setLatitude(this.latitude);
-        location.setLongitude(this.longitude);
-    }
-
-    private void addApiAddressToLocationObject(Location location) {
+    private void addApiAddressToLocationObject() {
         Iterator<String> keys = addressObject().keys();
         while (keys.hasNext()) {
             String key = keys.next();
@@ -65,10 +54,12 @@ public class GeocodeService {
             setPostcode(key);
             setCountry(key);
         }
+        this.location.setLatitude(this.latitude);
+        this.location.setLongitude(this.longitude);
     }
     private void setShop(String key){
         if (key.equals("shop")) {
-            location.setShop(addressObject().get(key).toString());
+            this.location.setShop(addressObject().get(key).toString());
         }
     }
     private void setHouseNumber(String key){
@@ -95,7 +86,7 @@ public class GeocodeService {
     }
 
     private void setCity(String key){
-        if (key.equals("city")) {
+        if (key.equals("city") || key.equals("town")) {
             location.setCity(addressObject().get(key).toString());
         }
     }
@@ -127,5 +118,6 @@ public class GeocodeService {
             location.setPostcode(addressObject().get(key).toString());
         }
     }
+
 }
 
