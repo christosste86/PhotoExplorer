@@ -42,6 +42,10 @@ public class Location {
         return id;
     }
 
+    public String getVillage() {
+        return village;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
