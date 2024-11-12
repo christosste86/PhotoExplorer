@@ -1,5 +1,8 @@
 package org.example.models;
 
+import org.example.connections.db.services.GenericService;
+import org.example.services.LocationServices;
+
 import javax.persistence.*;
 
 @Entity
@@ -28,8 +31,20 @@ public class Photo {
     public Photo() {
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
     public void setLocation(Location location){
         this.location = location;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
     }
 
     public void setWidth(int width) {
