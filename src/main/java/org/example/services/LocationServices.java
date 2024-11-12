@@ -20,6 +20,7 @@ public class LocationServices {
         this.photoObject = photoService.getPhotoObject();
         GeocodeService geocodeService = new GeocodeService(photoObject.getLatitude(), photoObject.getLongitude());
         this.locationObject = geocodeService.getLocationObject();
+        this.locationObject = locationFromDB();
     }
 
     private boolean isDuplicateObjectInDB(){
@@ -33,8 +34,16 @@ public class LocationServices {
                 .toList();
     }
 
+    private Location locationFromDB(){
+        if(isDuplicateObjectInDB()){
+            return filteredLocationList().get(0);
+        }return this.locationObject;
+    }
+
     public void saveToDB(){
-        locationService.save(this.locationObject);
+        if(!isDuplicateObjectInDB()){
+            locationService.save(this.locationObject);
+        }
     }
 
     public void updateToDB(){
