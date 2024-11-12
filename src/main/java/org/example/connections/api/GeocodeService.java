@@ -12,7 +12,7 @@ public class GeocodeService {
 
     private final String apiKey = "672494c88b52e639833548cvjf55303";
     private ApiConnect geocode;
-    private Location locationObject;
+    private Location locationObject =new Location();
 
 
     public GeocodeService() {
@@ -22,13 +22,12 @@ public class GeocodeService {
         this.latitude = latitude;
         this.longitude = longitude;
         String url = String.format("https://geocode.maps.co/reverse?lat=%s&lon=%s&api_key=%s", this.latitude, this.longitude, this.apiKey);
-        System.out.println(url);
         this.geocode = new ApiConnect(url);
         addApiAddressToLocationObject();
     }
 
     public Location getLocationObject() {
-        return locationObject;
+        return this.locationObject;
     }
 
     private JSONObject locationObject() {

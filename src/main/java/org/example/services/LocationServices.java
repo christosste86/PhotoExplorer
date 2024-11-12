@@ -7,6 +7,7 @@ import org.example.connections.db.services.GenericService;
 import org.example.models.Photo;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LocationServices {
@@ -20,7 +21,14 @@ public class LocationServices {
         this.photoObject = photoService.getPhotoObject();
         GeocodeService geocodeService = new GeocodeService(photoObject.getLatitude(), photoObject.getLongitude());
         this.locationObject = geocodeService.getLocationObject();
-        this.locationObject = locationFromDB();
+    }
+
+    public Location getLocationObject() {
+        return locationObject;
+    }
+
+    public Photo getPhotoObject() {
+        return photoObject;
     }
 
     private boolean isDuplicateObjectInDB(){
@@ -28,10 +36,14 @@ public class LocationServices {
     }
 
     private List<Location> filteredLocationList(){
-        return locationService.getAll()
-                .stream()
-                .filter(l-> l.getLatitude() == this.locationObject.getLatitude() && l.getLongitude() == this.locationObject.getLongitude())
-                .toList();
+        try {
+            return locationService.getAll()
+                    .stream()
+                    .filter(l -> l.getLatitude() == this.locationObject.getLatitude() && l.getLongitude() == this.locationObject.getLongitude())
+                    .toList();
+        }catch (Exception e){
+            return new ArrayList<>();
+        }
     }
 
     private Location locationFromDB(){
