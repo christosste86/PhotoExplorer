@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.connections.FtpConnect;
 import org.example.models.Location;
 import org.example.models.Photo;
 
@@ -16,6 +17,9 @@ public class ModifyPhoto {
     private Path destinationSource;
     private Location locationObject;
     private Photo photoObject;
+
+    public ModifyPhoto() {
+    }
 
     public ModifyPhoto(Path photoPath, Path destinationSource) {
         LocationServices locationServices = new LocationServices(photoPath);
@@ -150,6 +154,14 @@ public class ModifyPhoto {
         }
     }
 
+    public void moveFtpFiles(FtpConnect ftpConnect,String photoPath, String destinationPath){
+        try {
+            ftpConnect.getFtpClient().rename(photoPath, photoDestinationPath().toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void moveFile(){
         makeSubFolders();
         try {
@@ -159,5 +171,20 @@ public class ModifyPhoto {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void copyFile(){
+        makeSubFolders();
+        try {
+            Files.copy(this.photoObject.getImagePath(),
+                    photoDestinationPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public void removeOlderThan(int days){
+
     }
 }

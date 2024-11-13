@@ -13,10 +13,10 @@ import java.util.List;
 
 public class PhotoExplorer {
 
-    private String directory;
+    private Path directory;
     private List<Path> photoFiles = new ArrayList<>();
 
-    public PhotoExplorer(String directory) {
+    public PhotoExplorer(Path directory) {
         this.directory = directory;
         getPhotoPaths();
     }
@@ -26,28 +26,23 @@ public class PhotoExplorer {
     }
 
     private void getPhotoPaths() {
-        Path startPath = Paths.get(directory); // Replace with your directory
         try {
-            Files.walkFileTree(startPath, new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(this.directory, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (isImageFile(file)) {
                         photoFiles.add(file);
-                        //System.out.println("File: " + file.toString());
                     }
-
                     return FileVisitResult.CONTINUE; // Continue traversing
                 }
 
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                    //System.out.println("Entering directory: " + dir.toString());
                     return FileVisitResult.CONTINUE; // Continue traversing
                 }
 
                 @Override
                 public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-                    System.err.println("Failed to access: " + file.toString() + " due to " + exc);
                     return FileVisitResult.CONTINUE; // Continue traversing even if there's an error
                 }
             });
