@@ -26,7 +26,6 @@ public class FtpClient {
     private final boolean removeFileFromFtp = jsonFile.removeFileFromFtp();
 
     public FtpClient() {
-        System.out.println(this.port);
     }
 
     public FTPClient getFtpClient() {
