@@ -24,6 +24,9 @@ public class FtpClient {
     private final String ftpDirPath = jsonFile.ftpDirPath();
     private final String destinationDirPath = jsonFile.destinationDirPath();
     private final boolean removeFileFromFtp = jsonFile.removeFileFromFtp();
+    private final List<String> listOfAllFiles = new ArrayList<>();
+    private final List<String> listOfPhotoFiles = new ArrayList<>();
+    private final List<String> listOfVideoFiles = new ArrayList<>();
 
     public FtpClient() {
     }
@@ -32,7 +35,19 @@ public class FtpClient {
         return ftpClient;
     }
 
-    //logint to the FTP Server
+    public List<String> getListOfAllFiles() {
+        return listOfAllFiles;
+    }
+
+    public List<String> getListOfPhotoFiles() {
+        return listOfPhotoFiles;
+    }
+
+    public List<String> getListOfVideoFiles() {
+        return listOfVideoFiles;
+    }
+
+    //login to the FTP Server
     public void connect() {
         try {
             this.ftpClient.connect(this.server, this.port);
@@ -44,9 +59,7 @@ public class FtpClient {
             } else {
                 System.out.println("Login failed. Check username and password.");
             }
-        } catch (IOException ex) {
-            System.out.println("Error: " + ex.getMessage());
-            ex.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 
@@ -73,24 +86,21 @@ public class FtpClient {
     }
 
     //List of AllFiles in Specific directory
-    public List<String> getListAllFiles(){
-        List<String> dirFiles = new ArrayList<>();
+    public void containListOfAllFiles(){
         try {
             changeWorkingDirectory();
             String[] files = this.ftpClient.listNames();
             if(files !=null && files.length > 0){
-                dirFiles.addAll(Arrays.asList(files));
+                this.listOfAllFiles.addAll(Arrays.asList(files));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }return dirFiles;
+        };
     }
 
-    //List of Photos in Specific directory
-    public List<String> getListOfPhotoFiles(){
-        return getListAllFiles()
-                .stream()
-                .filter(this::isImageFile).toList();
+    //contain Photos files from Specific directory
+    public void containListOfPhotoFiles(){
+        this.listOfAllFiles.stream().filter(this::isImageFile).toList();
     }
 
     //check if file is image type
@@ -114,8 +124,8 @@ public class FtpClient {
     }
 
     //List of Videos in Specific directory
-    public List<String> getListOfVideoFiles(){
-        return getListAllFiles()
+    public void containListOfVideoFiles(){
+        this.listOfAllFiles
                 .stream()
                 .filter(this::isVideoFile).toList();
     }
@@ -157,15 +167,18 @@ public class FtpClient {
     }
 
     public void downloadVideoFiles(){
-        downloadFiles(getListOfVideoFiles());
+        containListOfVideoFiles();
+        downloadFiles(this.listOfVideoFiles);
     }
 
     public void downloadPhotoFiles(){
-            downloadFiles(getListOfPhotoFiles());
+        containListOfPhotoFiles();
+        downloadFiles(this.listOfPhotoFiles);
     }
 
     public void downloadAllFiles(){
-        downloadFiles(getListAllFiles());
+        containListOfAllFiles();
+        downloadFiles(this.listOfAllFiles);
     }
 
 
