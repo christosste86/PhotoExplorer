@@ -16,16 +16,16 @@ public class Photo {
     private long id;
 
     private Path imagePath;
-    private int width;
-    private int height;
+    private Integer width;
+    private Integer height;
     private String cameraModel;
     private String ownerName;
     private String Artist;
     private String bodySerialNumber;
     private LocalDateTime dateTime;
     private String hostComputer;
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
@@ -78,11 +78,11 @@ public class Photo {
         return latitude;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 
@@ -114,11 +114,11 @@ public class Photo {
         this.hostComputer = hostComputer;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
