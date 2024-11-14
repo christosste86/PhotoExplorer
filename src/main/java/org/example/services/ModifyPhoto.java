@@ -32,7 +32,7 @@ public class ModifyPhoto implements Verifications, Modification {
         System.out.println(this.locationObject);
     }
 
-    //output looks like cz (Jihomoravský kraj)
+    //output format (Jihomoravský kraj)
     private String getMapLocationString(){
         return String.format("%s (%s)", this.locationObject.getCountry_code(), this.locationObject.getCounty());
     }
@@ -60,7 +60,7 @@ public class ModifyPhoto implements Verifications, Modification {
         return this.photoObject.getDateTime().getYear();
     }
 
-
+    //choose a location by city, village, municipality, county
     private String cityVillage(){
         if(this.locationObject.getCity() != null){
             return this.locationObject.getCity();
@@ -140,10 +140,17 @@ public class ModifyPhoto implements Verifications, Modification {
 
     //move and rename fileName by location and photoDetails
     public void moveFile(){
-        makeSubFolders(this.subDirectories, this.targetDirectory);
+        Path photoDestinationPath = null;
+        String[] subFolders = null;
+        if (isLocated(this.photoObject.getLatitude(), this.photoObject.getLongitude())) {
+            photoDestinationPath = photoDestinationPath();
+            makeSubFolders(this.subDirectories, this.targetDirectory);
+        }else{
+            subFolders = new String[]{getYear() + "", getSeason(), getMapLocationString()};
+        }
         try {
             Files.move(this.photoObject.getImagePath(),
-                    photoDestinationPath(),
+                    photoDestinationPath,
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -162,6 +169,7 @@ public class ModifyPhoto implements Verifications, Modification {
     }
 
     public static void main(String[] args) {
+        ModifyPhoto modifyPhoto = new ModifyPhoto();
 
     }
 }

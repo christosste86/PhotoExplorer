@@ -37,5 +37,12 @@ public interface Verifications {
         return Files.exists(path);
     }
 
+    //check if Photo include coordinates
+    default boolean isLocated(Double latitude, Double longitude){
+        if(latitude == null && longitude == null){
+            return false;
+        }else return true;
+    }
+
 
 }
