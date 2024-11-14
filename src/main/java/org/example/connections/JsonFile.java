@@ -35,8 +35,8 @@ public class JsonFile {
         return transferObject().get("removeFileFromFtp").getAsBoolean();
     }
 
-    public String getFileExplorerDirectory(){
-        return fileExplorerObject().get("directory").getAsString();
+    public String getFileExplorerSourceDirectory(){
+        return fileExplorerObject().get("sourceDirectory").getAsString();
     }
 
     private JsonObject jsonObject(){
