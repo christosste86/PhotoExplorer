@@ -7,32 +7,36 @@ import java.util.Objects;
 
 public class JsonFile {
 
-    public String getServer(){
+    public String getFtpClientServer(){
         return ftpClientObject().get("server").getAsString();
     }
 
-    public int getPort(){
+    public int getFtpClientPort(){
         return ftpClientObject().get("port").getAsInt();
     }
 
-    public String getUser(){
+    public String getFtpClientUser(){
         return ftpClientObject().get("server").getAsString();
     }
 
-    public String getPass(){
+    public String getFtpClientPass(){
         return ftpClientObject().get("pass").getAsString();
     }
 
-    public String ftpDirPath(){
+    public String getFtpTransferDirPath(){
         return transferObject().get("ftpDirPath").getAsString();
     }
 
-    public String destinationDirPath(){
+    public String getFtpTransferDestinationDirPath(){
         return transferObject().get("destinationDirPath").getAsString();
     }
 
-    public boolean removeFileFromFtp(){
+    public boolean getFtpTransferRemoveFileFromFtp(){
         return transferObject().get("removeFileFromFtp").getAsBoolean();
+    }
+
+    public String getFileExplorerDirectory(){
+        return fileExplorerObject().get("directory").getAsString();
     }
 
     private JsonObject jsonObject(){
@@ -49,5 +53,9 @@ public class JsonFile {
 
     private JsonObject ftpClientObject(){
         return Objects.requireNonNull(jsonObject()).getAsJsonObject("ftpClient");
+    }
+
+    private JsonObject fileExplorerObject(){
+        return Objects.requireNonNull(jsonObject()).getAsJsonObject("fileExplorer");
     }
 }
