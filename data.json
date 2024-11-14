@@ -1,0 +1,13 @@
+{
+  "ftpClient": {
+    "server": "192.168.1.13",
+    "port": 2221,
+    "user": "christos",
+    "pass": "android",
+    "transfer": {
+      "ftpDirPath": "/DCIM/Camera",
+      "destinationDirPath": "U:\\BackUp\\Photos",
+      "removeFileFromFtp": false
+    }
+  }
+}
