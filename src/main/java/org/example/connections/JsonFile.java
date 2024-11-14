@@ -39,6 +39,10 @@ public class JsonFile {
         return fileExplorerObject().get("sourceDirectory").getAsString();
     }
 
+    public String getFileExplorerTargetDirectory(){
+        return fileExplorerObject().get("targetDirectory").getAsString();
+    }
+
     private JsonObject jsonObject(){
         try (FileReader reader = new FileReader("data.json")) {
             return JsonParser.parseReader(reader).getAsJsonObject();
