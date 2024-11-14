@@ -12,18 +12,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FtpClient {
+public class FtpClient implements Verifications {
 
     JsonFile jsonFile = new JsonFile();
 
-    private final String server = jsonFile.getServer();
-    private final int port = jsonFile.getPort();// FTP port
-    private final String user = jsonFile.getUser(); // Replace with your username
-    private final String pass = jsonFile.getPass(); // Replace with your password
+    private final String server = jsonFile.getFtpClientServer();
+    private final int port = jsonFile.getFtpClientPort();// FTP port
+    private final String user = jsonFile.getFtpClientUser(); // Replace with your username
+    private final String pass = jsonFile.getFtpClientPass(); // Replace with your password
     private final FTPClient ftpClient = new FTPClient();
-    private final String ftpDirPath = jsonFile.ftpDirPath();
-    private final String destinationDirPath = jsonFile.destinationDirPath();
-    private final boolean removeFileFromFtp = jsonFile.removeFileFromFtp();
+    private final String ftpDirPath = jsonFile.getFtpTransferDirPath();
+    private final String destinationDirPath = jsonFile.getFtpTransferDestinationDirPath();
+    private final boolean removeFileFromFtp = jsonFile.getFtpTransferRemoveFileFromFtp();
     private final List<String> listOfAllFiles = new ArrayList<>();
     private final List<String> listOfPhotoFiles = new ArrayList<>();
     private final List<String> listOfVideoFiles = new ArrayList<>();
@@ -100,27 +100,7 @@ public class FtpClient {
 
     //contain Photos files from Specific directory
     public void containListOfPhotoFiles(){
-        this.listOfAllFiles.stream().filter(this::isImageFile).toList();
-    }
-
-    //check if file is image type
-    private boolean isImageFile(String ftpFileName) {
-        String[] imgTypes = {"jpg", "jpeg", "heic"};
-        for (String type : imgTypes) {
-            if (ftpFileName.toLowerCase().endsWith(type)) {
-                return true;
-            }
-        }return false;
-    }
-
-    //check if file is Video type
-    private boolean isVideoFile(String ftpFileName) {
-        String[] videoTypes = {"avi", "mpg", "mpeg", "mkv", "ts", "mov", "webm", "flv", "wmv", "3gp", "hevc", "h265", "av1", "asf", "ogv"};
-        for(String type: videoTypes){
-            if(ftpFileName.toLowerCase().endsWith(type)){
-                return true;
-            }
-        }return false;
+        this.listOfAllFiles.stream().filter(this::isImgFile).toList();
     }
 
     //List of Videos in Specific directory
