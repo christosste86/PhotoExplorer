@@ -1,4 +1,8 @@
 {
+  "fileExplorer": {
+    "sourceDirectory": "U:\\BackUp\\Photos\\2024\\Spring\\okres Brno-město"
+  },
+
   "ftpClient": {
     "server": "192.168.1.13",
     "port": 2221,
