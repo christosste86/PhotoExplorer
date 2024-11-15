@@ -1,6 +1,9 @@
 package org.example.services;
 
-import org.example.connections.FtpConnect;
+import org.example.connections.FtpClient;
+import org.example.connections.JsonFile;
+import org.example.connections.Modification;
+import org.example.connections.Verifications;
 import org.example.models.Location;
 import org.example.models.Photo;
 
@@ -9,30 +12,32 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Objects;
 
-public class ModifyPhoto {
-    private Path destinationSource;
+public class ModifyPhoto implements Verifications, Modification {
+    JsonFile jsonFile = new JsonFile();
+    private Path targetDirectory = Path.of(jsonFile.getFileExplorerTargetDirectory());
     private Location locationObject;
     private Photo photoObject;
+    private final String[] subDirectories = {getYear()+"", getSeason(), getMapLocationString()};
 
     public ModifyPhoto() {
     }
 
     public ModifyPhoto(Path photoPath, Path destinationSource) {
         LocationServices locationServices = new LocationServices(photoPath);
-        this.destinationSource = destinationSource;
+        this.targetDirectory = destinationSource;
         this.locationObject = locationServices.getLocationObject();
         this.photoObject = locationServices.getPhotoObject();
         System.out.println(this.locationObject);
     }
 
+    //output format (Jihomoravský kraj)
     private String getMapLocationString(){
         return String.format("%s (%s)", this.locationObject.getCountry_code(), this.locationObject.getCounty());
     }
 
+    //output season of date  Winter, Autumn, Summer, Spring
     private String getSeason() {
         if (this.photoObject.getDateTime().getMonthValue() == 12 && this.photoObject.getDateTime().getDayOfMonth() >= 21) {
             return "Winter";
@@ -50,10 +55,12 @@ public class ModifyPhoto {
         }
     }
 
-    private String getYear(){
-        return this.photoObject.getDateTime().getYear() + "";
+    //get year of date
+    private int getYear(){
+        return this.photoObject.getDateTime().getYear();
     }
 
+    //choose a location by city, village, municipality, county
     private String cityVillage(){
         if(this.locationObject.getCity() != null){
             return this.locationObject.getCity();
@@ -66,7 +73,7 @@ public class ModifyPhoto {
         }return null;
     }
 
-
+    //get information about who take the photo
     private String photographer(){
         if(this.photoObject.getOwnerName() != null){
             return this.photoObject.getOwnerName();
@@ -79,6 +86,7 @@ public class ModifyPhoto {
         }return null;
     }
 
+    //get time 2024.3.24(20.16.6) by date
     private String timeFormat(){
         String dateFormat = String.format("%s.%s.%s(%s.%s.%s)",
                 this.photoObject.getDateTime().getYear(),
@@ -90,20 +98,14 @@ public class ModifyPhoto {
         return String.format("%s",dateFormat);
     }
 
-    private <T> boolean isArrayEmpty(T[] array){
-        for(T e:array){
-            if(e != null){
-                return false;
-            }
-        }return true;
-    }
-
+    //get house number format: 265-89b
     private String houseNumber(){
         if (this.locationObject.getHouse_number() != null){
             return this.locationObject.getHouse_number().replace("/", "-");
         }return this.locationObject.getHouse_number();
     }
 
+    //get if the position is in Shop or touristic place
     private String shopTourism(){
         if (this.locationObject.getTourism() != null){
             return this.locationObject.getTourism();
@@ -112,6 +114,7 @@ public class ModifyPhoto {
         }return null;
     }
 
+    //get finally name if coordinates are not null
     private String getPhotoName(){
         String[] details = {cityVillage(), this.locationObject.getRoad(), houseNumber(), this.locationObject.getCountry_code()};
         return String.format("%s%s%s%s%s",
@@ -120,11 +123,11 @@ public class ModifyPhoto {
                 photographer() == null ? "" : String.format(" (%s)",photographer()),
                 isArrayEmpty(details) ? "" : String.format(" in %s", Arrays.toString(details)),
                 ".jpg");
-
     }
 
+
     private Path photoDestinationPath(){
-        return Path.of(this.destinationSource +
+        return Path.of(this.targetDirectory +
                 File.separator +
                 getYear() +
                 File.separator +
@@ -135,46 +138,28 @@ public class ModifyPhoto {
                 getPhotoName());
     }
 
-    private boolean isPathExist(Path path){
-        return Files.exists(path);
-    }
-
-    private void makeSubFolders(){
-        String[] subdirectories = {getYear(), getSeason(), getMapLocationString()};
-        Path destinationPath = this.destinationSource;
-        for(String path : subdirectories){
-            destinationPath = Path.of(destinationPath + File.separator + path);
-            if(!isPathExist(destinationPath)){
-                try {
-                    Files.createDirectory(destinationPath);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void moveFtpFiles(FtpConnect ftpConnect,String photoPath, String destinationPath){
-        try {
-            ftpConnect.getFtpClient().rename(photoPath, photoDestinationPath().toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    //move and rename fileName by location and photoDetails
     public void moveFile(){
-        makeSubFolders();
+        Path photoDestinationPath = null;
+        String[] subFolders = null;
+        if (isLocated(this.photoObject.getLatitude(), this.photoObject.getLongitude())) {
+            photoDestinationPath = photoDestinationPath();
+            makeSubFolders(this.subDirectories, this.targetDirectory);
+        }else{
+            subFolders = new String[]{getYear() + "", getSeason(), getMapLocationString()};
+        }
         try {
             Files.move(this.photoObject.getImagePath(),
-                    photoDestinationPath(),
+                    photoDestinationPath,
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    //copy rename fileName by location and photoDetails
     public void copyFile(){
-        makeSubFolders();
+        makeSubFolders(this.subDirectories, this.targetDirectory);
         try {
             Files.copy(this.photoObject.getImagePath(),
                     photoDestinationPath());
@@ -183,8 +168,8 @@ public class ModifyPhoto {
         }
     }
 
-
-    public void removeOlderThan(int days){
+    public static void main(String[] args) {
+        ModifyPhoto modifyPhoto = new ModifyPhoto();
 
     }
 }

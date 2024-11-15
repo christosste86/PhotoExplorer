@@ -1,5 +1,8 @@
 package org.example.connections;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public interface Verifications {
 
     //check if file is image type
@@ -20,6 +23,25 @@ public interface Verifications {
                 return true;
             }
         }return false;
+    }
+
+    default <T> boolean isArrayEmpty(T[] array){
+        for(T e:array){
+            if(e != null){
+                return false;
+            }
+        }return true;
+    }
+
+    default boolean isPathExist(Path path){
+        return Files.exists(path);
+    }
+
+    //check if Photo include coordinates
+    default boolean isLocated(Double latitude, Double longitude){
+        if(latitude == null && longitude == null){
+            return false;
+        }else return true;
     }
 
 
