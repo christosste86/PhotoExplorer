@@ -25,8 +25,8 @@ public class FtpClient implements Verifications {
     private final String destinationDirPath = jsonFile.getFtpTransferDestinationDirPath();
     private final boolean removeFileFromFtp = jsonFile.getFtpTransferRemoveFileFromFtp();
     private final List<String> listOfAllFiles = new ArrayList<>();
-    private final List<String> listOfPhotoFiles = new ArrayList<>();
-    private final List<String> listOfVideoFiles = new ArrayList<>();
+    private List<String> listOfPhotoFiles = new ArrayList<>();
+    private List<String> listOfVideoFiles = new ArrayList<>();
 
     public FtpClient() {
     }
@@ -100,14 +100,18 @@ public class FtpClient implements Verifications {
 
     //contain Photos files from Specific directory
     public void containListOfPhotoFiles(){
-        this.listOfAllFiles.stream().filter(this::isImgFile).toList();
+        this.listOfPhotoFiles = this.listOfAllFiles
+                .stream()
+                .filter(this::isImgFile)
+                .toList();
     }
 
     //List of Videos in Specific directory
     public void containListOfVideoFiles(){
-        this.listOfAllFiles
+        this.listOfVideoFiles = this.listOfAllFiles
                 .stream()
-                .filter(this::isVideoFile).toList();
+                .filter(this::isVideoFile)
+                .toList();
     }
 
     //set to binary file type to and buffer size for better transferring files;
@@ -130,12 +134,11 @@ public class FtpClient implements Verifications {
                         if(!isFileExist(ftpFileName)) {
                             boolean isDownload = this.ftpClient.retrieveFile(ftpFileName, outputStream);
                             if (isDownload) {
-                                System.out.println(ftpFileName + " downloaded");
                                 if (this.removeFileFromFtp) {
                                     removeFile(ftpFileName);
                                 }
                             }
-                            System.out.println(isDownload ? "downloaded" : "canceled");
+                            System.out.println(isDownload ? ftpFileName + " downloaded" : ftpFileName + " canceled");
                         }
                     } catch (IOException e) {
                         throw new RuntimeException(e);
