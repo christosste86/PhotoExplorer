@@ -1,6 +1,6 @@
 package org.example.services;
 
-import org.example.connections.FtpClient;
+import org.example.connections.FileExplorer;
 import org.example.connections.JsonFile;
 import org.example.connections.Modification;
 import org.example.connections.Verifications;
@@ -13,23 +13,30 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class ModifyPhoto implements Verifications, Modification {
-    JsonFile jsonFile = new JsonFile();
-    private Path targetDirectory = Path.of(jsonFile.getFileExplorerTargetDirectory());
-    private Location locationObject;
-    private Photo photoObject;
-    private final String[] subDirectories = {getYear()+"", getSeason(), getMapLocationString()};
+    private final JsonFile jsonFile = new JsonFile();
+    private final Path targetDirectory = Path.of(jsonFile.getFileExplorerTargetDirectory());
+    private Path photoPath;
+    private Location locationObject = new Location();
+    private Photo photoObject = new Photo();
 
     public ModifyPhoto() {
     }
 
-    public ModifyPhoto(Path photoPath, Path destinationSource) {
-        LocationServices locationServices = new LocationServices(photoPath);
-        this.targetDirectory = destinationSource;
+    public ModifyPhoto(Path photoPath) {
+        this.photoPath = photoPath;
+        PhotoService photoService = new PhotoService(this.photoPath);
+        LocationServices locationServices = new LocationServices(this.photoPath);
+        this.photoObject = photoService.getPhotoObject();
         this.locationObject = locationServices.getLocationObject();
-        this.photoObject = locationServices.getPhotoObject();
-        System.out.println(this.locationObject);
+    }
+
+
+
+    public Photo getPhotoObject() {
+        return photoObject;
     }
 
     //output format (Jihomoravský kraj)
@@ -115,61 +122,81 @@ public class ModifyPhoto implements Verifications, Modification {
     }
 
     //get finally name if coordinates are not null
-    private String getPhotoName(){
+    private String getFileLocatedName(){
         String[] details = {cityVillage(), this.locationObject.getRoad(), houseNumber(), this.locationObject.getCountry_code()};
         return String.format("%s%s%s%s%s",
                 timeFormat(),
                 shopTourism() == null ? "" : String.format(" %s",shopTourism()),
                 photographer() == null ? "" : String.format(" (%s)",photographer()),
                 isArrayEmpty(details) ? "" : String.format(" in %s", Arrays.toString(details)),
-                ".jpg");
+                getExtension());
     }
 
-
-    private Path photoDestinationPath(){
-        return Path.of(this.targetDirectory +
-                File.separator +
-                getYear() +
-                File.separator +
-                getSeason() +
-                File.separator +
-                getMapLocationString() +
-                File.separator +
-                getPhotoName());
+    //get extension of file
+    private String getExtension(){
+        String pathName = this.photoObject.getImagePath().toString();
+        int lastDot = pathName.lastIndexOf(".");
+        if(lastDot != -1){
+            return pathName.substring(lastDot);
+        }return null;
     }
 
-    //move and rename fileName by location and photoDetails
+    //get finally name if coordinates are null
+    private String getFileUnplacedName(){
+        return String.format("%s%s%s",
+                timeFormat(),
+                photographer() == null ? "" : String.format("-%s",photographer()),
+                getExtension());
+    }
+
+    //Generate path from two strings[]
+    private Path fileDestinationPath(String[] sourceSubDirectories){
+        String filePath = "";
+        for (int i = 0; i < sourceSubDirectories.length; i++) {
+                filePath += sourceSubDirectories[i] + File.separator;
+        }return Path.of(filePath);
+    }
+
+    private String[] locatedSubDirectories() {
+        return new String[] {
+                this.targetDirectory.toString(),
+                String.valueOf(getYear()),
+                getSeason(),
+                getMapLocationString(),
+                getFileLocatedName()};
+    }
+    private String[] unplacedSubDirectories() {
+        return new String[] {
+                this.targetDirectory.toString(),
+                String.valueOf(getYear()),
+                getSeason(),
+                "unplaced",
+                getFileUnplacedName()};
+    }
+
+    //generate located Photo path
+    private Path photoLocatedDestinationPath(){
+        return fileDestinationPath(this.locatedSubDirectories());
+    }
+
+    //Generate unplaced Photo path
+    private Path photoUnplacedDestinationPath(){
+        return fileDestinationPath(this.unplacedSubDirectories());
+    }
+
     public void moveFile(){
-        Path photoDestinationPath = null;
-        String[] subFolders = null;
-        if (isLocated(this.photoObject.getLatitude(), this.photoObject.getLongitude())) {
-            photoDestinationPath = photoDestinationPath();
-            makeSubFolders(this.subDirectories, this.targetDirectory);
-        }else{
-            subFolders = new String[]{getYear() + "", getSeason(), getMapLocationString()};
-        }
-        try {
-            Files.move(this.photoObject.getImagePath(),
-                    photoDestinationPath,
-                    StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    //copy rename fileName by location and photoDetails
-    public void copyFile(){
-        makeSubFolders(this.subDirectories, this.targetDirectory);
-        try {
-            Files.copy(this.photoObject.getImagePath(),
-                    photoDestinationPath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        moveFile(this.photoObject.getImagePath(),
+                this.photoObject.getLatitude(),
+                this.photoObject.getLongitude(),
+                photoLocatedDestinationPath(),
+                photoUnplacedDestinationPath());
     }
 
     public static void main(String[] args) {
-        ModifyPhoto modifyPhoto = new ModifyPhoto();
-
+        FileExplorer fileExplorer = new FileExplorer();
+        fileExplorer.getListOfPhotosFiles().forEach(photo ->{
+            ModifyPhoto modifyPhoto = new ModifyPhoto(photo);
+            modifyPhoto.moveFile();
+        });
     }
 }

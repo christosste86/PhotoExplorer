@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.connections.FileExplorer;
 import org.example.connections.db.daos.GenericDao;
 import org.example.models.Photo;
 import org.example.connections.db.services.GenericService;
@@ -74,4 +75,11 @@ public class PhotoService {
         this.photoObject.setHostComputer(photoData.getHostname());
     }
 
+    public static void main(String[] args) {
+        FileExplorer fileExplorer = new FileExplorer();
+        fileExplorer.getListOfPhotosFiles().forEach(photo -> {
+            PhotoService photoService = new PhotoService(photo);
+            System.out.println(photoService.getPhotoObject().toString());
+        });
+    }
 }
