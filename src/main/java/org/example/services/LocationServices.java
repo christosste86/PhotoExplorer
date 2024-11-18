@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.connections.FileExplorer;
 import org.example.connections.api.GeocodeService;
 import org.example.connections.db.daos.GenericDao;
 import org.example.models.Location;
@@ -19,8 +20,10 @@ public class LocationServices {
     public LocationServices(Path photoPath) {
         PhotoService photoService = new PhotoService(photoPath);
         this.photoObject = photoService.getPhotoObject();
-        GeocodeService geocodeService = new GeocodeService(photoObject.getLatitude(), photoObject.getLongitude());
-        this.locationObject = geocodeService.getLocationObject();
+        if(photoObject.getLatitude() != null && photoObject.getLongitude() != null) {
+            GeocodeService geocodeService = new GeocodeService(photoObject.getLatitude(), photoObject.getLongitude());
+            this.locationObject = geocodeService.getLocationObject();
+        }
     }
 
     public Location getLocationObject() {
@@ -35,12 +38,11 @@ public class LocationServices {
         return !filteredLocationList().isEmpty();
     }
 
+
+
     private List<Location> filteredLocationList(){
         try {
-            return locationService.getAll()
-                    .stream()
-                    .filter(l -> l.getLatitude() == this.locationObject.getLatitude() && l.getLongitude() == this.locationObject.getLongitude())
-                    .toList();
+            return locationService.getAll();
         }catch (Exception e){
             return new ArrayList<>();
         }
@@ -68,5 +70,13 @@ public class LocationServices {
 
     public void getByIDFromDB(long id){
         locationService.getById(id);
+    }
+
+    public static void main(String[] args) {
+        FileExplorer fileExplorer = new FileExplorer();
+        fileExplorer.getListOfPhotosFiles().forEach(photo -> {
+            LocationServices locationServices = new LocationServices(photo);
+            locationServices.saveToDB();
+        });
     }
 }

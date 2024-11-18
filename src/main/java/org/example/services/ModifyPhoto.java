@@ -41,7 +41,17 @@ public class ModifyPhoto implements Verifications, Modification {
 
     //output format (Jihomoravský kraj)
     private String getMapLocationString(){
-        return String.format("%s (%s)", this.locationObject.getCountry_code(), this.locationObject.getCounty());
+        return String.format("%s (%s)",
+                countryCode(),
+                this.locationObject.getCounty());
+    }
+
+    private String countryCode() {
+        if (this.locationObject.getCountry_code() != null) {
+            return this.locationObject.getCountry_code();
+        } else if (this.locationObject.getCountry() != null) {
+            return this.locationObject.getCountry();
+        }return "";
     }
 
     //output season of date  Winter, Autumn, Summer, Spring
@@ -81,7 +91,7 @@ public class ModifyPhoto implements Verifications, Modification {
     }
 
     //get information about who take the photo
-    private String photographer(){
+    private String owner(){
         if(this.photoObject.getOwnerName() != null){
             return this.photoObject.getOwnerName();
         } else if(this.photoObject.getHostComputer() != null){
@@ -123,13 +133,31 @@ public class ModifyPhoto implements Verifications, Modification {
 
     //get finally name if coordinates are not null
     private String getFileLocatedName(){
-        String[] details = {cityVillage(), this.locationObject.getRoad(), houseNumber(), this.locationObject.getCountry_code()};
         return String.format("%s%s%s%s%s",
                 timeFormat(),
                 shopTourism() == null ? "" : String.format(" %s",shopTourism()),
-                photographer() == null ? "" : String.format(" (%s)",photographer()),
-                isArrayEmpty(details) ? "" : String.format(" in %s", Arrays.toString(details)),
+                owner() == null ? "" : String.format(" (%s)",owner()),
+                isArrayEmpty(addressDetails()) ? "" : String.format(" in [%s]", address()),
                 getExtension());
+    }
+
+    private String[] addressDetails(){
+        return new String[] {cityVillage(), this.locationObject.getRoad(), houseNumber(), this.locationObject.getCountry()};
+    }
+
+    private String address(){
+        String address = "";
+        for (int i = 0; i < addressDetails().length; i++) {
+            if(addressDetails()[i] == null){
+                address += "";
+            }
+            else if (addressDetails()[i] != null && i < addressDetails().length - 1) {
+                address += addressDetails()[i] + ", ";
+            } else{
+                address += addressDetails()[addressDetails().length - 1];
+            }
+        }
+        return address.toString();
     }
 
     //get extension of file
@@ -145,9 +173,10 @@ public class ModifyPhoto implements Verifications, Modification {
     private String getFileUnplacedName(){
         return String.format("%s%s%s",
                 timeFormat(),
-                photographer() == null ? "" : String.format("-%s",photographer()),
+                owner() == null ? "" : String.format("-%s",owner()),
                 getExtension());
     }
+
 
     //Generate path from two strings[]
     private Path fileDestinationPath(String[] sourceSubDirectories){
@@ -163,6 +192,7 @@ public class ModifyPhoto implements Verifications, Modification {
                 String.valueOf(getYear()),
                 getSeason(),
                 getMapLocationString(),
+                this.locationObject.getMunicipality(),
                 getFileLocatedName()};
     }
     private String[] unplacedSubDirectories() {
@@ -172,6 +202,28 @@ public class ModifyPhoto implements Verifications, Modification {
                 getSeason(),
                 "unplaced",
                 getFileUnplacedName()};
+    }
+
+    private String[] getSubFoldersOfPath() {
+        if(isLocated(photoObject.getLatitude(), photoObject.getLongitude())){
+            return locatedSubDirectories();
+        }else return unplacedSubDirectories();
+    }
+
+    //create subfolders
+    private void makeSubFolders(){
+        String path = "";
+        for(String folder: getSubFoldersOfPath()){
+            path += folder;
+            if(!Files.exists(Path.of(path))){
+                try {
+                    Files.createDirectory(Path.of(path));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            path += File.separator;
+        }
     }
 
     //generate located Photo path
@@ -185,6 +237,7 @@ public class ModifyPhoto implements Verifications, Modification {
     }
 
     public void moveFile(){
+        makeSubFolders();
         moveFile(this.photoObject.getImagePath(),
                 this.photoObject.getLatitude(),
                 this.photoObject.getLongitude(),

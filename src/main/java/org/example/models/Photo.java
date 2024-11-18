@@ -15,17 +15,17 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private Path imagePath;
-    private Integer width;
-    private Integer height;
-    private String cameraModel;
-    private String ownerName;
-    private String Artist;
-    private String bodySerialNumber;
-    private LocalDateTime dateTime;
-    private String hostComputer;
-    private Double latitude;
-    private Double longitude;
+    private Path imagePath = null;
+    private Integer width = null;
+    private Integer height = null;
+    private String cameraModel = null;
+    private String ownerName = null;
+    private String artist = null;
+    private String bodySerialNumber = null;
+    private LocalDateTime dateTime = null;
+    private String hostComputer = null;
+    private Double latitude = null;
+    private Double longitude = null;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
@@ -47,7 +47,7 @@ public class Photo {
     }
 
     public String getArtist() {
-        return Artist;
+        return artist;
     }
 
     public String getBodySerialNumber() {
@@ -70,11 +70,11 @@ public class Photo {
         this.location = location;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
@@ -99,7 +99,7 @@ public class Photo {
     }
 
     public void setArtist(String artist) {
-        Artist = artist;
+        artist = artist;
     }
 
     public void setBodySerialNumber(String bodySerialNumber) {
@@ -131,7 +131,7 @@ public class Photo {
                 ", height=" + height +
                 ", cameraModel='" + cameraModel + '\'' +
                 ", ownerName='" + ownerName + '\'' +
-                ", Artist='" + Artist + '\'' +
+                ", Artist='" + artist + '\'' +
                 ", bodySerialNumber='" + bodySerialNumber + '\'' +
                 ", dateTime='" + dateTime + '\'' +
                 ", hostComputer='" + hostComputer + '\'' +
