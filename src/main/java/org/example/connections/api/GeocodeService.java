@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 public class GeocodeService {
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
 
     private final String apiKey = "672494c88b52e639833548cvjf55303";
     private ApiConnect geocode;
@@ -18,12 +18,14 @@ public class GeocodeService {
     public GeocodeService() {
     }
 
-    public GeocodeService(double latitude, double longitude) {
+    public GeocodeService(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-        String url = String.format("https://geocode.maps.co/reverse?lat=%s&lon=%s&api_key=%s", this.latitude, this.longitude, this.apiKey);
-        this.geocode = new ApiConnect(url);
-        addApiAddressToLocationObject();
+        if(latitude !=null && longitude !=null) {
+            String url = String.format("https://geocode.maps.co/reverse?lat=%s&lon=%s&api_key=%s", this.latitude, this.longitude, this.apiKey);
+            this.geocode = new ApiConnect(url);
+            addApiAddressToLocationObject();
+        }
     }
 
     public Location getLocationObject() {

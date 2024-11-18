@@ -4,20 +4,42 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
-public interface Modification{
+public interface Modification extends Verifications{
 
-    //create subfolders
-    default void makeSubFolders(String[] subdirectories, Path targetDirectory){
-        for(String path : subdirectories){
-            targetDirectory = Path.of(targetDirectory + File.separator + path);
-            if(!Files.exists(targetDirectory)){
-                try {
-                    Files.createDirectory(targetDirectory);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+    //choose photo destination path if photo is located or unplaced
+    default Path destinationPath(Double latitude, Double longitude, Path locatedPath, Path unplacedPath){
+        if(isLocated(latitude, longitude)){
+            return locatedPath;
+        }return unplacedPath;
+    }
+
+    //move and rename fileName by location and photoDetails
+    default void moveFile(Path filePath, Double latitude, Double longitude, Path locatedPath, Path unplacedPath){
+        Path destinationPath = destinationPath(latitude,longitude,locatedPath,unplacedPath);
+        System.out.println("Destination File "+destinationPath);
+        try {
+            Files.move(filePath,
+                    destinationPath,
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //copy and rename fileName by location and photoDetails
+    default void copyFile(Path filePath, Double latitude, Double longitude, Path locatedPath, Path unplacedPath){
+        Path destinationPath = destinationPath(latitude,longitude,locatedPath,unplacedPath);
+        try {
+            Files.copy(filePath,
+                    destinationPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
+

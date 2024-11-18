@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.connections.FileExplorer;
 import org.example.connections.db.daos.GenericDao;
 import org.example.models.Photo;
 import org.example.connections.db.services.GenericService;
@@ -61,8 +62,13 @@ public class PhotoService {
     //create photoObject from photo path
     private void createPhotoObjectFromPath(Path photoPath){
         ImgMetadata photoData = new ImgMetadata(photoPath.toString());
-        this.photoObject.setLongitude(photoData.getLongitude());
-        this.photoObject.setLatitude(photoData.getLatitude());
+        if((photoData.getLongitude() == null || photoData.getLongitude() == 0.0) && (photoData.getLatitude() == null || photoData.getLatitude() == 0.0)){
+            this.photoObject.setLongitude(null);
+            this.photoObject.setLatitude(null);
+        }else{
+            this.photoObject.setLongitude(photoData.getLongitude());
+            this.photoObject.setLatitude(photoData.getLatitude());
+        }
         this.photoObject.setImagePath(photoData.getPath());
         this.photoObject.setWidth(photoData.getWidth());
         this.photoObject.setHeight(photoData.getHeight());
@@ -74,4 +80,15 @@ public class PhotoService {
         this.photoObject.setHostComputer(photoData.getHostname());
     }
 
+    public static void main(String[] args) {
+        GenericDao<Photo, Long> photoDao = new GenericDao<>(Photo.class);
+        GenericService<Photo, Long> photoServicea = new GenericService<>(photoDao);
+
+        FileExplorer fileExplorer = new FileExplorer();
+        fileExplorer.getListOfPhotosFiles().forEach(photo -> {
+            PhotoService photoService = new PhotoService(photo);
+            System.out.println(photoService.getPhotoObject().toString());
+            photoServicea.save(photoService.getPhotoObject());
+        });
+    }
 }
