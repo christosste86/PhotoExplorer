@@ -1,9 +1,12 @@
 package org.example.services;
 
+import com.drew.metadata.exif.GpsDirectory;
 import org.example.connections.FileExplorer;
 import org.example.connections.JsonFile;
 import org.example.connections.Modification;
 import org.example.connections.Verifications;
+import org.example.connections.db.daos.GenericDao;
+import org.example.connections.db.services.GenericService;
 import org.example.models.Location;
 import org.example.models.Photo;
 
@@ -39,6 +42,10 @@ public class ModifyPhoto implements Verifications, Modification {
         return photoObject;
     }
 
+    public Location getLocationObject() {
+        return locationObject;
+    }
+
     //output format (Jihomoravský kraj)
     private String getMapLocationString(){
         return String.format("%s (%s)",
@@ -59,13 +66,13 @@ public class ModifyPhoto implements Verifications, Modification {
         if (this.photoObject.getDateTime().getMonthValue() == 12 && this.photoObject.getDateTime().getDayOfMonth() >= 21) {
             return "Winter";
         }
-        if (this.photoObject.getDateTime().getMonthValue() >= 9 && this.photoObject.getDateTime().getDayOfMonth() >= 22) {
+        if (this.photoObject.getDateTime().getMonthValue() >= 10) {
             return "Autumn";
         }
-        if (this.photoObject.getDateTime().getMonthValue() >= 6 && this.photoObject.getDateTime().getDayOfMonth() >= 21) {
+        if (this.photoObject.getDateTime().getMonthValue() >= 6) {
             return "Summer";
         }
-        if (this.photoObject.getDateTime().getMonthValue() >= 3 && this.photoObject.getDateTime().getDayOfMonth() >= 20) {
+        if (this.photoObject.getDateTime().getMonthValue() >= 3) {
             return "Spring";
         } else {
             return "Winter";
@@ -178,7 +185,7 @@ public class ModifyPhoto implements Verifications, Modification {
     }
 
 
-    //Generate path from two strings[]
+    //Generate path from strings[]
     private Path fileDestinationPath(String[] sourceSubDirectories){
         String filePath = "";
         for (int i = 0; i < sourceSubDirectories.length; i++) {
@@ -236,20 +243,30 @@ public class ModifyPhoto implements Verifications, Modification {
         return fileDestinationPath(this.unplacedSubDirectories());
     }
 
+    private Path filePath(){
+        if(isLocated(this.photoObject.getLatitude(), this.photoObject.getLongitude())){
+            return photoLocatedDestinationPath();
+        }else return photoUnplacedDestinationPath();
+    }
+
     public void moveFile(){
         makeSubFolders();
         moveFile(this.photoObject.getImagePath(),
-                this.photoObject.getLatitude(),
-                this.photoObject.getLongitude(),
-                photoLocatedDestinationPath(),
-                photoUnplacedDestinationPath());
+                filePath());
     }
 
     public static void main(String[] args) {
+
+        GenericDao<Location, Long> locationDao = new GenericDao<>(Location.class);
+        GenericService<Location, Long> locationService = new GenericService<>(locationDao);
+
         FileExplorer fileExplorer = new FileExplorer();
         fileExplorer.getListOfPhotosFiles().forEach(photo ->{
             ModifyPhoto modifyPhoto = new ModifyPhoto(photo);
             modifyPhoto.moveFile();
+            System.out.println(modifyPhoto.getPhotoObject());
+            System.out.println(modifyPhoto.getLocationObject());
+//            locationService.save(modifyPhoto.getLocationObject());
         });
     }
 }

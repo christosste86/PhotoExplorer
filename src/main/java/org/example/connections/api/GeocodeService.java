@@ -1,7 +1,6 @@
 package org.example.connections.api;
 
 import org.example.models.Location;
-import org.example.services.LocationServices;
 import org.json.JSONObject;
 
 import java.util.Iterator;
@@ -57,6 +56,7 @@ public class GeocodeService {
             setCountry(key);
             setTourism(key);
             setCountryCod(key);
+            setBuilding(key);
         }
         this.locationObject.setLatitude(this.latitude);
         this.locationObject.setLongitude(this.longitude);
@@ -126,7 +126,7 @@ public class GeocodeService {
         }
     }
     private void setCountry(String key){
-        if (key.equals("country_code")) {
+        if (key.equals("country")) {
             this.locationObject.setCountry(addressObject().get(key).toString());
         }
     }
@@ -135,5 +135,16 @@ public class GeocodeService {
             this.locationObject.setPostcode(addressObject().get(key).toString());
         }
     }
+
+    private void setBuilding(String key){
+        if (key.equals("building")) {
+            this.locationObject.setBuilding(addressObject().get(key).toString());
+        }
+    }
+
+    public static void main(String[] args) {
+
+    }
 }
+
 

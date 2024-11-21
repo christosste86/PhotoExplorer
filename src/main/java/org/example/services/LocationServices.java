@@ -55,9 +55,10 @@ public class LocationServices {
     }
 
     public void saveToDB(){
-        if(!isDuplicateObjectInDB()){
-            locationService.save(this.locationObject);
-        }
+        locationService.save(this.locationObject);
+//        if(!isDuplicateObjectInDB()){
+//            locationService.save(this.locationObject);
+//        }
     }
 
     public void updateToDB(){

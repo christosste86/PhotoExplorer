@@ -5,41 +5,39 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Locations")
 public class Location {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
-    private Double latitude = null;
-    private Double longitude = null;
-    private String country_code = null;
-    private String country = null;
-    private String state = null;
-    private String postcode= null;
-    private String county = null;
-    private String municipality = null;
-    private String city = null;
-    private String village = null;
-    private String suburb = null;
-    private String road = null;
-    private String house_number = null;
-    private String shop = null;
-    private String tourism = null;
+    private Double latitude;
+    private Double longitude;
+    @Column(name = "country_code")
+    private String countryCode;
+    private String country;
+    private String state;
+    private String postcode;
+    private String county;
+    private String municipality;
+    private String city;
+    private String village;
+    private String suburb;
+    private String road;
+    private String house_number;
+    private String shop;
+    private String tourism;
+    private String building;
 
 //    @OneToMany(mappedBy = "location")
 //    private List<Photo> photos = new ArrayList<>();
-
-    public Location() {
-    }
+//
+//    public Location() {
+//    }
 
 //    public void setPhoto(Photo photo){
 //        photos.add(photo);
 //        photo.setLocation(this);
 //    }
-
-    public long getId() {
-        return id;
-    }
 
     public void setState(String state) {
         this.state = state;
@@ -54,7 +52,7 @@ public class Location {
     }
 
     public String getCountry_code() {
-        return country_code;
+        return countryCode;
     }
 
     public String getCountry() {
@@ -122,7 +120,7 @@ public class Location {
     }
 
     public void setCountry_code(String country_code) {
-        this.country_code = country_code;
+        this.countryCode = country_code;
     }
 
     public void setCountry(String country) {
@@ -161,14 +159,20 @@ public class Location {
         this.shop = shop;
     }
 
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
+    }
 
     @Override
     public String toString() {
         return "Location{" +
-                "id=" + id +
-                ", latitude=" + latitude +
+                "latitude=" + latitude +
                 ", longitude=" + longitude +
-                ", country_code='" + country_code + '\'' +
+                ", countryCode='" + countryCode + '\'' +
                 ", country='" + country + '\'' +
                 ", state='" + state + '\'' +
                 ", postcode='" + postcode + '\'' +
@@ -181,6 +185,7 @@ public class Location {
                 ", house_number='" + house_number + '\'' +
                 ", shop='" + shop + '\'' +
                 ", tourism='" + tourism + '\'' +
+                ", building='" + building + '\'' +
                 '}';
     }
 }

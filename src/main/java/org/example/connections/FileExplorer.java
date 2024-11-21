@@ -13,7 +13,7 @@ public class FileExplorer implements Verifications{
 
     JsonFile jsonFile = new JsonFile();
 
-    private final Path sourceDirectory = Path.of(jsonFile.getFileExplorerSourceDirectory());
+    private Path sourceDirectory = Path.of(jsonFile.getFileExplorerSourceDirectory());
     private List<Path> listOfPhotosFiles = new ArrayList<>();
     private List<Path> listOfVideosFiles = new ArrayList<>();
     private final List<Path> listOfAllFiles = new ArrayList<>();
@@ -23,6 +23,10 @@ public class FileExplorer implements Verifications{
         containListOfAllFiles();
         containAllPhotoFiles();
         containAllVideoFiles();
+    }
+
+    public void setSourceDirectory(Path sourceDirectory) {
+        this.sourceDirectory = sourceDirectory;
     }
 
     private void containListOfAllFiles() {

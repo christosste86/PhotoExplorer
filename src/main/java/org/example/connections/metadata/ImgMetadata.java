@@ -33,9 +33,7 @@ public class ImgMetadata {
     private Metadata metadata(){
         try {
             return ImageMetadataReader.readMetadata(new File(this.imagePath));
-        } catch (ImageProcessingException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (ImageProcessingException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -58,18 +56,18 @@ public class ImgMetadata {
 
     public Double getLatitude(){
         if (gpsDirectory() != null){
-            return gpsDirectory().getGeoLocation().getLatitude();
-        }else{
-            return null;
-        }
+            if (metadata().getFirstDirectoryOfType(GpsDirectory.class).getTagCount() > 0) {
+                return gpsDirectory().getGeoLocation().getLatitude();
+            }
+        }return null;
     }
 
     public Double getLongitude(){
-        if (gpsDirectory() != null){
-            return gpsDirectory().getGeoLocation().getLongitude();
-        }else{
-            return null;
-        }
+        if (gpsDirectory() !=null){
+            if (metadata().getFirstDirectoryOfType(GpsDirectory.class).getTagCount() > 0){
+                return gpsDirectory().getGeoLocation().getLongitude();
+            }
+        }return null;
     }
 
     public Integer getWidth(){
@@ -95,33 +93,25 @@ public class ImgMetadata {
     public String getModel(){
         if(exifIFD0Directory().containsTag(ExifIFD0Directory.TAG_MODEL)){
             return exifIFD0Directory().getString(ExifIFD0Directory.TAG_MODEL);
-        }else{
-            return null;
-        }
+        }return null;
     }
 
     public String getCameraOwner(){
         if(exifIFD0Directory().containsTag(ExifIFD0Directory.TAG_CAMERA_OWNER_NAME)) {
             return exifIFD0Directory().getString(ExifIFD0Directory.TAG_CAMERA_OWNER_NAME);
-        }else{
-            return null;
-        }
+        }return null;
     }
 
     public String getArtist(){
         if(exifIFD0Directory().containsTag(ExifIFD0Directory.TAG_ARTIST)) {
             return exifIFD0Directory().getString(ExifIFD0Directory.TAG_ARTIST);
-        }else{
-            return null;
-        }
+        }return null;
     }
 
     public String getBodySerialNumber(){
         if(exifIFD0Directory().containsTag(ExifIFD0Directory.TAG_BODY_SERIAL_NUMBER)) {
             return exifIFD0Directory().getString(ExifIFD0Directory.TAG_BODY_SERIAL_NUMBER);
-        }else{
-            return null;
-        }
+        }return null;
     }
 
     public LocalDateTime  getDateTimeOriginal(){
@@ -130,9 +120,7 @@ public class ImgMetadata {
             return date.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
-        }else{
-            return null;
-        }
+        }return null;
     }
 
 
@@ -142,9 +130,7 @@ public class ImgMetadata {
             return date.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
-        }else{
-            return null;
-        }
+        }return null;
     }
 
     public LocalDateTime getDateTimeDigital(){
@@ -153,16 +139,12 @@ public class ImgMetadata {
             return date.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
-        }else{
-            return null;
-        }
+        }return null;
     }
 
     public String getHostname(){
         if(exifIFD0Directory().containsTag(ExifIFD0Directory.TAG_HOST_COMPUTER)) {
             return exifIFD0Directory().getString(ExifIFD0Directory.TAG_HOST_COMPUTER);
-        }else{
-            return null;
-        }
+        }return null;
     }
 }

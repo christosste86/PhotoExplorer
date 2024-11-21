@@ -11,24 +11,24 @@ public class GenericService <T, ID extends Serializable> {
             this.genericDao = genericDao;
         }
 
-        public void save(T entiny){
-            genericDao.save(entiny);
-        }
+        public T save(T entity){
+        genericDao.save(entity);
 
-        public T getById(ID id){
-            return genericDao.getById(id);
-        }
-
-        public void update(T entity){
-            genericDao.update(entity);
-        }
-
-        public void delete(T entity){
-            genericDao.delete(entity);
-        }
-
-        public List<T> getAll(){
-            return genericDao.getAll();
-        }
+        return entity;
     }
+
+    public T getById(ID id){
+        return genericDao.getById(id);
+    }
+
+    public List<T> getAll() { return genericDao.getAll(); }
+
+    public void update(T entity){
+        genericDao.update(entity);
+    }
+
+    public void delete(T entity){
+        genericDao.delete(entity);
+    }
+}
 

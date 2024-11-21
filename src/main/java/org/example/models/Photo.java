@@ -15,17 +15,17 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private Path imagePath = null;
-    private Integer width = null;
-    private Integer height = null;
-    private String cameraModel = null;
-    private String ownerName = null;
-    private String artist = null;
-    private String bodySerialNumber = null;
-    private LocalDateTime dateTime = null;
-    private String hostComputer = null;
-    private Double latitude = null;
-    private Double longitude = null;
+    private Path imagePath;
+    private Integer width;
+    private Integer height;
+    private String cameraModel;
+    private String ownerName;
+    private String artist;
+    private String bodySerialNumber;
+    private LocalDateTime dateTime;
+    private String hostComputer;
+    private Double latitude;
+    private Double longitude;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
@@ -125,16 +125,18 @@ public class Photo {
     @Override
     public String toString() {
         return "Photo{" +
-                "id=" + id +
-                ", imagePath='" + imagePath + '\'' +
+                "imagePath=" + imagePath +
                 ", width=" + width +
                 ", height=" + height +
                 ", cameraModel='" + cameraModel + '\'' +
                 ", ownerName='" + ownerName + '\'' +
-                ", Artist='" + artist + '\'' +
+                ", artist='" + artist + '\'' +
                 ", bodySerialNumber='" + bodySerialNumber + '\'' +
-                ", dateTime='" + dateTime + '\'' +
+                ", dateTime=" + dateTime +
                 ", hostComputer='" + hostComputer + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", location=" + location +
                 '}';
     }
 }
