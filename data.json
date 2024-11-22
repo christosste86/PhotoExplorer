@@ -1,7 +1,11 @@
 {
   "fileExplorer": {
-    "sourceDirectory": "U:\\BackUp\\Photos",
+    "sourceDirectory": "U:\\Photos",
     "targetDirectory": "U:\\BackUp\\Photos"
+  },
+
+  "models": {
+    "scanners": ["CanoScan LiDE 120"]
   },
 
   "ftpClient": {

@@ -1,5 +1,7 @@
 package org.example.services;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import org.example.connections.FileExplorer;
 import org.example.connections.JsonFile;
 import org.example.connections.Modification;
@@ -56,20 +58,15 @@ public class ModifyPhoto implements Verifications, Modification {
 
     //output season of date  Winter, Autumn, Summer, Spring
     private String getSeason() {
-        if (this.photoObject.getDateTime().getMonthValue() == 12 && this.photoObject.getDateTime().getDayOfMonth() >= 21) {
-            return "Winter";
-        }
-        if (this.photoObject.getDateTime().getMonthValue() >= 9 && this.photoObject.getDateTime().getDayOfMonth() >= 22) {
+        if (this.photoObject.getDateTime().getMonthValue() >= 10) {
             return "Autumn";
         }
-        if (this.photoObject.getDateTime().getMonthValue() >= 6 && this.photoObject.getDateTime().getDayOfMonth() >= 21) {
+        if (this.photoObject.getDateTime().getMonthValue() >= 7) {
             return "Summer";
         }
-        if (this.photoObject.getDateTime().getMonthValue() >= 3 && this.photoObject.getDateTime().getDayOfMonth() >= 20) {
+        if (this.photoObject.getDateTime().getMonthValue() >= 4) {
             return "Spring";
-        } else {
-            return "Winter";
-        }
+        }return "Winter";
     }
 
     //get year of date
@@ -165,12 +162,19 @@ public class ModifyPhoto implements Verifications, Modification {
         String pathName = this.photoObject.getImagePath().toString();
         int lastDot = pathName.lastIndexOf(".");
         if(lastDot != -1){
-            return pathName.substring(lastDot);
-        }return null;
+            return pathName.substring(lastDot).toLowerCase();
+        }return "jpg";
     }
 
     //get finally name if coordinates are null
     private String getFileUnplacedName(){
+        return String.format("%s%s%s",
+                timeFormat(),
+                owner() == null ? "" : String.format("-%s",owner()),
+                getExtension());
+    }
+
+    private String getFileScannerName(){
         return String.format("%s%s%s",
                 timeFormat(),
                 owner() == null ? "" : String.format("-%s",owner()),
@@ -204,17 +208,51 @@ public class ModifyPhoto implements Verifications, Modification {
                 getFileUnplacedName()};
     }
 
+    private String[] scannerSubDirectories() {
+        return new String[] {
+                this.targetDirectory.toString(),
+                "Scanned",
+                getFileScannerName()};
+    }
+
+    private String[] destroyedSubDirectories() {
+        return new String[] {
+                this.targetDirectory.toString(),
+                "Destroyed",
+                this.photoPath.getFileName().toString()};
+    }
+
     private String[] getSubFoldersOfPath() {
+        if(isDestroyedFile()){
+            return destroyedSubDirectories();
+        }
+        if(isScannerModel()){
+            return scannerSubDirectories();
+        }
         if(isLocated(photoObject.getLatitude(), photoObject.getLongitude())){
             return locatedSubDirectories();
-        }else return unplacedSubDirectories();
+        }return unplacedSubDirectories();
+    }
+
+    private boolean isScannerModel(){
+        for(JsonElement e :jsonFile.getScannerModels()){
+            if(photoObject.getCameraModel() != null && photoObject.getCameraModel().equals(e)){
+                return true;
+            }
+        }return false;
+    }
+
+    private boolean isDestroyedFile(){
+        if(photoObject.getDateTime() == null){
+            return true;
+        }return false;
     }
 
     //create subfolders
     private void makeSubFolders(){
         String path = "";
-        for(String folder: getSubFoldersOfPath()){
-            path += folder;
+        for (int i = 0; i < getSubFoldersOfPath().length-1; i++) {
+            path += getSubFoldersOfPath()[i];
             if(!Files.exists(Path.of(path))){
                 try {
                     Files.createDirectory(Path.of(path));
@@ -226,30 +264,44 @@ public class ModifyPhoto implements Verifications, Modification {
         }
     }
 
-    //generate located Photo path
-    private Path photoLocatedDestinationPath(){
-        return fileDestinationPath(this.locatedSubDirectories());
+    private Path getDestinationPath(){
+        if(isDestroyedFile()){
+            return fileDestinationPath(destroyedSubDirectories());
+        }
+        if(isScannerModel()){
+            return fileDestinationPath(scannerSubDirectories());
+        }
+        if(isLocated(photoObject.getLatitude(), photoObject.getLongitude())){
+            return fileDestinationPath(locatedSubDirectories());
+        }return fileDestinationPath(unplacedSubDirectories());
     }
 
-    //Generate unplaced Photo path
-    private Path photoUnplacedDestinationPath(){
-        return fileDestinationPath(this.unplacedSubDirectories());
-    }
 
     public void moveFile(){
         makeSubFolders();
-        moveFile(this.photoObject.getImagePath(),
-                this.photoObject.getLatitude(),
-                this.photoObject.getLongitude(),
-                photoLocatedDestinationPath(),
-                photoUnplacedDestinationPath());
+        try {
+            Files.move(this.photoPath, getDestinationPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void copyFile(){
+        makeSubFolders();
+        if(Files.notExists(getDestinationPath())){
+            try {
+                Files.copy(this.photoPath, getDestinationPath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static void main(String[] args) {
         FileExplorer fileExplorer = new FileExplorer();
         fileExplorer.getListOfPhotosFiles().forEach(photo ->{
             ModifyPhoto modifyPhoto = new ModifyPhoto(photo);
-            modifyPhoto.moveFile();
+            modifyPhoto.copyFile();
         });
     }
 }

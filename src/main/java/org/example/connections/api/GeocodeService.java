@@ -65,75 +65,75 @@ public class GeocodeService {
     private void setCountryCod(String key) {
         if (key.equals("country_code")) {
             this.locationObject.setCountry_code(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setCountry_code(null);}
     }
 
     private void setTourism(String key){
         if (key.equals("tourism")) {
             this.locationObject.setTourism(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setTourism(null);}
     }
 
     private void setShop(String key){
         if (key.equals("shop")) {
             this.locationObject.setShop(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setShop(null);}
     }
     private void setHouseNumber(String key){
         if (key.equals("house_number")) {
             this.locationObject.setHouse_number(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setHouse_number(null);}
     }
 
     private void setRoad(String key){
         if (key.equals("road")) {
             this.locationObject.setRoad(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setRoad(null);}
     }
 
     private void setSuburb(String key){
         if (key.equals("suburb")) {
             this.locationObject.setSuburb(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setSuburb(null);}
     }
     private void setVillage(String key){
         if (key.equals("village")) {
             this.locationObject.setVillage(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setVillage(null);}
     }
 
     private void setCity(String key){
         if (key.equals("city")) {
             this.locationObject.setCity(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setCity(null);}
     }
 
     private void setMunicipality(String key){
         if (key.equals("municipality")) {
             this.locationObject.setMunicipality(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setMunicipality(null);}
     }
 
     private void setCounty(String key){
         if (key.equals("county")) {
             this.locationObject.setCounty(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setCounty(null);}
     }
 
     private void setState(String key){
         if (key.equals("state")) {
             this.locationObject.setState(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setState(null);}
     }
     private void setCountry(String key){
         if (key.equals("country_code")) {
             this.locationObject.setCountry(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setCountry(null);}
     }
     private void setPostcode(String key){
         if (key.equals("postcode")) {
             this.locationObject.setPostcode(addressObject().get(key).toString());
-        }
+        }else{this.locationObject.setPostcode(null);}
     }
 }
 

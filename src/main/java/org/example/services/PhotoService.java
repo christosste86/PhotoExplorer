@@ -6,12 +6,13 @@ import org.example.models.Photo;
 import org.example.connections.db.services.GenericService;
 import org.example.connections.metadata.ImgMetadata;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PhotoService {
     private GenericDao<Photo, Long> photoDao = new GenericDao<>(Photo.class);
     private GenericService<Photo, Long> photoService = new GenericService<>(photoDao);
-    private Photo photoObject = new Photo();
+    private Photo photoObject;
 
     //call PhotoService with path and create photo Object
     public PhotoService(Path photoPath) {
@@ -61,23 +62,30 @@ public class PhotoService {
 
     //create photoObject from photo path
     private void createPhotoObjectFromPath(Path photoPath){
-        ImgMetadata photoData = new ImgMetadata(photoPath.toString());
-        if((photoData.getLongitude() == null || photoData.getLongitude() == 0.0) && (photoData.getLatitude() == null || photoData.getLatitude() == 0.0)){
-            this.photoObject.setLongitude(null);
-            this.photoObject.setLatitude(null);
-        }else{
-            this.photoObject.setLongitude(photoData.getLongitude());
-            this.photoObject.setLatitude(photoData.getLatitude());
-        }
-        this.photoObject.setImagePath(photoData.getPath());
+        ImgMetadata photoData = new ImgMetadata(photoPath);
+        this.photoObject.setLongitude(photoData.getLongitude());
+        this.photoObject.setLatitude(photoData.getLatitude());
+        this.photoObject.setImagePath(photoData.getImagePath());
         this.photoObject.setWidth(photoData.getWidth());
         this.photoObject.setHeight(photoData.getHeight());
         this.photoObject.setCameraModel(photoData.getModel());
         this.photoObject.setOwnerName(photoData.getCameraOwner());
         this.photoObject.setArtist(photoData.getArtist());
         this.photoObject.setBodySerialNumber(photoData.getBodySerialNumber());
-        this.photoObject.setDateTime(photoData.getDateTime());
+        this.photoObject.setDateTime(dateTime(photoData));
         this.photoObject.setHostComputer(photoData.getHostname());
+    }
+
+    private LocalDateTime dateTime(ImgMetadata photoData){
+        if(photoData.getDateTimeOriginal() != null){
+            return photoData.getDateTimeOriginal();
+        }if(photoData.getDateTimeDigital() != null){
+            return photoData.getDateTimeDigital();
+        }if(photoData.getDateTime() != null){
+            return photoData.getDateTime();
+        }if(photoData.getModificationDate() != null){
+            return photoData.getModificationDate();
+        }return null;
     }
 
     public static void main(String[] args) {
