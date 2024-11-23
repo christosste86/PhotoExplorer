@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class JsonFile {
@@ -51,7 +53,15 @@ public class JsonFile {
 
     //models
 
-    public JsonElement getScannerModels() { return models().get("scanners").getAsJsonArray();}
+    private JsonArray scannerModels() { return models().get("scanners").getAsJsonArray();}
+
+    public List<String> getScannerModels(){
+        List<String> newList = new ArrayList<>();
+        for (JsonElement e: scannerModels()){
+            newList.add(e.toString());
+        }
+        return newList;
+    }
 
     private JsonObject jsonObject(){
         try (FileReader reader = new FileReader("data.json")) {
