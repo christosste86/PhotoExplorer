@@ -14,10 +14,6 @@ public class GeocodeService {
     private ApiConnect geocode;
     private Location locationObject =new Location();
 
-
-    public GeocodeService() {
-    }
-
     public GeocodeService(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -63,8 +59,8 @@ public class GeocodeService {
     }
 
     private void setCountryCod(String key) {
-        if (key.equals("country_code")) {
-            this.locationObject.setCountry_code(addressObject().get(key).toString());
+        if (key.equals("country")) {
+            this.locationObject.setCountry(addressObject().get(key).toString());
         }
     }
 
@@ -127,7 +123,7 @@ public class GeocodeService {
     }
     private void setCountry(String key){
         if (key.equals("country_code")) {
-            this.locationObject.setCountry(addressObject().get(key).toString());
+            this.locationObject.setCountry_code(addressObject().get(key).toString());
         }
     }
     private void setPostcode(String key){

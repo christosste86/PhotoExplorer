@@ -1,4 +1,5 @@
 package org.example.connections;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.FileReader;
@@ -43,12 +44,18 @@ public class JsonFile {
         return fileExplorerObject().get("targetDirectory").getAsString();
     }
 
+    public JsonArray getScannerModels() { return models().get("scanners").getAsJsonArray();}
+
     private JsonObject jsonObject(){
         try (FileReader reader = new FileReader("data.json")) {
             return JsonParser.parseReader(reader).getAsJsonObject();
         } catch (IOException e) {
             e.printStackTrace();
         }return null;
+    }
+
+    private JsonObject models(){
+        return Objects.requireNonNull(jsonObject()).getAsJsonObject("models");
     }
 
     private JsonObject transferObject(){

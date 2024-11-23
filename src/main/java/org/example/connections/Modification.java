@@ -21,7 +21,6 @@ public interface Modification extends Verifications{
     //move and rename fileName by location and photoDetails
     default void moveFile(Path filePath, Double latitude, Double longitude, Path locatedPath, Path unplacedPath){
         Path destinationPath = destinationPath(latitude,longitude,locatedPath,unplacedPath);
-        System.out.println("Destination File "+destinationPath);
         try {
             Files.move(filePath,
                     destinationPath,
