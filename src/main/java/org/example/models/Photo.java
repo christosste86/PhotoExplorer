@@ -15,17 +15,17 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private Path imagePath = null;
-    private Integer width = null;
-    private Integer height = null;
-    private String cameraModel = null;
-    private String ownerName = null;
-    private String artist = null;
-    private String bodySerialNumber = null;
-    private LocalDateTime dateTime = null;
-    private String hostComputer = null;
-    private Double latitude = null;
-    private Double longitude = null;
+    private Path imagePath;
+    private Integer width;
+    private Integer height;
+    private String cameraModel;
+    private String ownerName;
+    private String artist;
+    private String bodySerialNumber;
+    private LocalDateTime dateTime;
+    private String hostComputer;
+    private Double latitude;
+    private Double longitude;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
@@ -38,88 +38,104 @@ public class Photo {
         return id;
     }
 
-    public String getCameraModel() {
-        return cameraModel;
-    }
-
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
-    public String getBodySerialNumber() {
-        return bodySerialNumber;
-    }
-
-    public String getHostComputer() {
-        return hostComputer;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Path getImagePath() {
         return imagePath;
     }
 
-    public void setLocation(Location location){
-        this.location = location;
+    public void setImagePath(Path imagePath) {
+        this.imagePath = imagePath;
     }
 
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public Double getLatitude() {
-        return latitude;
+    public Integer getWidth() {
+        return width;
     }
 
     public void setWidth(Integer width) {
         this.width = width;
     }
 
+    public Integer getHeight() {
+        return height;
+    }
+
     public void setHeight(Integer height) {
         this.height = height;
     }
 
-    public void setImagePath(Path imagePath) {
-        this.imagePath = imagePath;
+    public String getCameraModel() {
+        return cameraModel;
     }
 
     public void setCameraModel(String cameraModel) {
         this.cameraModel = cameraModel;
     }
 
+    public String getOwnerName() {
+        return ownerName;
+    }
+
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
 
+    public String getArtist() {
+        return artist;
+    }
+
     public void setArtist(String artist) {
-        artist = artist;
+        this.artist = artist;
+    }
+
+    public String getBodySerialNumber() {
+        return bodySerialNumber;
     }
 
     public void setBodySerialNumber(String bodySerialNumber) {
         this.bodySerialNumber = bodySerialNumber;
     }
 
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getHostComputer() {
+        return hostComputer;
     }
 
     public void setHostComputer(String hostComputer) {
         this.hostComputer = hostComputer;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
+    public Double getLongitude() {
+        return longitude;
+    }
+
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override
