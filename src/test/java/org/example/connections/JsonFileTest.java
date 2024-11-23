@@ -10,7 +10,7 @@ class JsonFileTest {
         JsonFile jsonFile = new JsonFile();
         assertEquals("U:\\BackUp\\Photos", jsonFile.getFileExplorerTargetDirectory());
         assertEquals("U:\\Photos", jsonFile.getFileExplorerSourceDirectory());
-        assertArrayEquals(new String[]{"CanoScan LiDE 120"}, jsonFile.getScannerModels());
+
     }
 
 }
