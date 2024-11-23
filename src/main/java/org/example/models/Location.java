@@ -10,21 +10,21 @@ public class Location {
     private long id;
 
     @Column(nullable = false)
-    private Double latitude = null;
-    private Double longitude = null;
-    private String country_code = null;
-    private String country = null;
-    private String state = null;
-    private String postcode= null;
-    private String county = null;
-    private String municipality = null;
-    private String city = null;
-    private String village = null;
-    private String suburb = null;
-    private String road = null;
-    private String house_number = null;
-    private String shop = null;
-    private String tourism = null;
+    private Double latitude;
+    private Double longitude;
+    private String country_code;
+    private String country;
+    private String state;
+    private String postcode;
+    private String county;
+    private String municipality;
+    private String city;
+    private String village;
+    private String suburb;
+    private String road;
+    private String house_number;
+    private String shop;
+    private String tourism;
 
 //    @OneToMany(mappedBy = "location")
 //    private List<Photo> photos = new ArrayList<>();
