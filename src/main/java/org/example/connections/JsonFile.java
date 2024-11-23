@@ -1,5 +1,6 @@
 package org.example.connections;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.FileReader;
@@ -8,6 +9,16 @@ import java.util.Objects;
 
 public class JsonFile {
 
+    //fileExplorer
+    public String getFileExplorerSourceDirectory(){
+        return fileExplorerObject().get("sourceDirectory").getAsString();
+    }
+
+    public String getFileExplorerTargetDirectory(){
+        return fileExplorerObject().get("targetDirectory").getAsString();
+    }
+
+    //ftpClient
     public String getFtpClientServer(){
         return ftpClientObject().get("server").getAsString();
     }
@@ -17,12 +28,14 @@ public class JsonFile {
     }
 
     public String getFtpClientUser(){
-        return ftpClientObject().get("server").getAsString();
+        return ftpClientObject().get("user").getAsString();
     }
 
     public String getFtpClientPass(){
         return ftpClientObject().get("pass").getAsString();
     }
+
+    //ftpClient -> transfer
 
     public String getFtpTransferDirPath(){
         return transferObject().get("ftpDirPath").getAsString();
@@ -36,15 +49,9 @@ public class JsonFile {
         return transferObject().get("removeFileFromFtp").getAsBoolean();
     }
 
-    public String getFileExplorerSourceDirectory(){
-        return fileExplorerObject().get("sourceDirectory").getAsString();
-    }
+    //models
 
-    public String getFileExplorerTargetDirectory(){
-        return fileExplorerObject().get("targetDirectory").getAsString();
-    }
-
-    public JsonArray getScannerModels() { return models().get("scanners").getAsJsonArray();}
+    public JsonElement getScannerModels() { return models().get("scanners").getAsJsonArray();}
 
     private JsonObject jsonObject(){
         try (FileReader reader = new FileReader("data.json")) {

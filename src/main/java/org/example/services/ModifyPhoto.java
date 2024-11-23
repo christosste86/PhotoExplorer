@@ -234,8 +234,12 @@ public class ModifyPhoto implements Verifications, Modification {
         }return unplacedSubDirectories();
     }
 
+    private String[] scannerModels(){
+        return new String[] {};
+    }
+
     private boolean isScannerModel(){
-        for(JsonElement e :jsonFile.getScannerModels()){
+        for(JsonElement e :jsonFile.getScannerModels().getAsJsonArray()){
             if(photoObject.getCameraModel() != null && photoObject.getCameraModel().equals(e)){
                 return true;
             }
