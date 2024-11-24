@@ -5,7 +5,7 @@
   },
 
   "models": {
-    "scanners": "CanoScan LiDE 120"
+    "scanners": ["CanoScan LiDE 120"]
   },
 
   "ftpClient": {

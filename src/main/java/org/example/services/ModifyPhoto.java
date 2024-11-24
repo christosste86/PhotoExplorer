@@ -178,7 +178,12 @@ public class ModifyPhoto implements Verifications, Modification {
         return String.format("%s%s%s",
                 timeFormat(),
                 owner() == null ? "" : String.format("-%s",owner()),
+                subFolder(),
                 getExtension());
+    }
+
+    private String subFolder(){
+        return getSubFoldersOfPath()[getSubFoldersOfPath().length-2];
     }
 
 
@@ -234,12 +239,9 @@ public class ModifyPhoto implements Verifications, Modification {
         }return unplacedSubDirectories();
     }
 
-    private String[] scannerModels(){
-        return new String[] {};
-    }
 
     private boolean isScannerModel(){
-        for(JsonElement e :jsonFile.getScannerModels().getAsJsonArray()){
+        for(String e :jsonFile.getScannerModels()){
             if(photoObject.getCameraModel() != null && photoObject.getCameraModel().equals(e)){
                 return true;
             }
@@ -268,7 +270,7 @@ public class ModifyPhoto implements Verifications, Modification {
         }
     }
 
-    private Path getDestinationPath(){
+    public Path getDestinationPath(){
         if(isDestroyedFile()){
             return fileDestinationPath(destroyedSubDirectories());
         }
@@ -302,10 +304,12 @@ public class ModifyPhoto implements Verifications, Modification {
     }
 
     public static void main(String[] args) {
+        LocationServices locationServices = new LocationServices();
         FileExplorer fileExplorer = new FileExplorer();
         fileExplorer.getListOfPhotosFiles().forEach(photo ->{
             ModifyPhoto modifyPhoto = new ModifyPhoto(photo);
             modifyPhoto.copyFile();
+            locationServices.saveToDB();
         });
     }
 }

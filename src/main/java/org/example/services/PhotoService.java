@@ -12,7 +12,7 @@ import java.util.List;
 public class PhotoService {
     private GenericDao<Photo, Long> photoDao = new GenericDao<>(Photo.class);
     private GenericService<Photo, Long> photoService = new GenericService<>(photoDao);
-    private Photo photoObject;
+    private final Photo photoObject = new Photo();
 
     //call PhotoService with path and create photo Object
     public PhotoService(Path photoPath) {

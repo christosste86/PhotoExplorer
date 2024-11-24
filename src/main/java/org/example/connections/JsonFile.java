@@ -37,8 +37,8 @@ public class JsonFile {
         return ftpClientObject().get("pass").getAsString();
     }
 
-    //ftpClient -> transfer
 
+    //ftpClient -> transfer
     public String getFtpTransferDirPath(){
         return transferObject().get("ftpDirPath").getAsString();
     }
@@ -52,13 +52,12 @@ public class JsonFile {
     }
 
     //models
-
     private JsonArray scannerModels() { return models().get("scanners").getAsJsonArray();}
 
     public List<String> getScannerModels(){
         List<String> newList = new ArrayList<>();
         for (JsonElement e: scannerModels()){
-            newList.add(e.toString());
+            newList.add(e.getAsString());
         }
         return newList;
     }
@@ -86,4 +85,6 @@ public class JsonFile {
     private JsonObject fileExplorerObject(){
         return Objects.requireNonNull(jsonObject()).getAsJsonObject("fileExplorer");
     }
+
+
 }

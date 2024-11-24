@@ -17,6 +17,9 @@ public class LocationServices {
     private Location locationObject;
     private Photo photoObject;
 
+    public LocationServices() {
+    }
+
     public LocationServices(Path photoPath) {
         PhotoService photoService = new PhotoService(photoPath);
         this.photoObject = photoService.getPhotoObject();
