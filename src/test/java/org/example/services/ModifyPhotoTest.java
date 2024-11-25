@@ -17,19 +17,25 @@ class ModifyPhotoTest {
     @Test
     void testUnplacedPhotoDestinationPath(){
         ModifyPhoto modifyPhoto = new ModifyPhoto(Path.of("photos/unplacedphoto/unplacedPhotoTest.jpg"));
-        assertEquals("U:\\BackUp\\Photos\\2024\\Winter\\unplaced\\2024.2.27(11.6.41)-moto g71 5G.jpg", modifyPhoto.getDestinationPath().toString());
+        assertEquals("U:\\BackUp\\Photos\\2024\\Winter\\unplacedphoto\\2024.2.27(11.6.41)-moto g71 5G-(unplacedphoto).jpg", modifyPhoto.getDestinationPath().toString());
     }
 
     @Test
     void testOldPhotoDestinationPath(){
         ModifyPhoto modifyPhoto = new ModifyPhoto(Path.of("photos/oldPhotos/oldPhotoTest.JPG"));
-        assertEquals("U:\\BackUp\\Photos\\2006\\Summer\\unplaced\\2006.9.9(10.32.26)-DSC-P92.jpg", modifyPhoto.getDestinationPath().toString());
+        assertEquals("U:\\BackUp\\Photos\\2006\\Summer\\oldPhotos\\2006.9.9(10.32.26)-DSC-P92-(oldPhotos).jpg", modifyPhoto.getDestinationPath().toString());
     }
 
     @Test
     void testScannedPhotoDestinationPath(){
         ModifyPhoto modifyPhoto = new ModifyPhoto(Path.of("photos\\scennedphotos\\scannerPhotoTest.jpg"));
-        assertEquals("U:\\BackUp\\Photos\\Scanned\\2024.11.23(9.27.18)-CanoScan LiDE 120.jpg", modifyPhoto.getDestinationPath().toString());
+        assertEquals("U:\\BackUp\\Photos\\Scanned\\scennedphotos\\2024.11.23(9.27.18)-CanoScan LiDE 120-(scennedphotos).jpg", modifyPhoto.getDestinationPath().toString());
+    }
+
+    @Test
+    void subfolderName(){
+        ModifyPhoto modifyPhoto = new ModifyPhoto(Path.of("photos\\scennedphotos\\scannerPhotoTest.jpg"));
+        assertEquals("scennedphotos", modifyPhoto.subFolderName());
     }
 
 }

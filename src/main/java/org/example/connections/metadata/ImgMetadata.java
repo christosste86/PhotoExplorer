@@ -67,13 +67,17 @@ public class ImgMetadata {
             return null;
         }if(Objects.requireNonNull(gpsDirectory()).getTagCount() <= 0){
             return null;
-        }return Objects.requireNonNull(gpsDirectory()).getGeoLocation().getLatitude();
+        }if(Objects.isNull(gpsDirectory().getGeoLocation())){
+        return null;
+    }return Objects.requireNonNull(gpsDirectory()).getGeoLocation().getLatitude();
     }
 
     public Double getLongitude(){
         if(gpsDirectory() == null) {
             return null;
         }if(Objects.requireNonNull(gpsDirectory()).getTagCount() <= 0){
+            return null;
+        }if(Objects.isNull(gpsDirectory().getGeoLocation())){
             return null;
         }
         return Objects.requireNonNull(gpsDirectory()).getGeoLocation().getLongitude();

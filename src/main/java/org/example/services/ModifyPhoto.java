@@ -36,13 +36,12 @@ public class ModifyPhoto implements Verifications, Modification {
     }
 
 
-
     public Photo getPhotoObject() {
         return photoObject;
     }
 
     //output format (Jihomoravský kraj)
-    private String getMapLocationString(){
+    private String getMapLocationString() {
         return String.format("%s (%s)",
                 countryCode(),
                 this.locationObject.getCounty());
@@ -53,7 +52,8 @@ public class ModifyPhoto implements Verifications, Modification {
             return this.locationObject.getCountry_code();
         } else if (this.locationObject.getCountry() != null) {
             return this.locationObject.getCountry();
-        }return "";
+        }
+        return "";
     }
 
     //output season of date  Winter, Autumn, Summer, Spring
@@ -66,42 +66,45 @@ public class ModifyPhoto implements Verifications, Modification {
         }
         if (this.photoObject.getDateTime().getMonthValue() >= 4) {
             return "Spring";
-        }return "Winter";
+        }
+        return "Winter";
     }
 
     //get year of date
-    private int getYear(){
+    private int getYear() {
         return this.photoObject.getDateTime().getYear();
     }
 
     //choose a location by city, village, municipality, county
-    private String cityVillage(){
-        if(this.locationObject.getCity() != null){
+    private String cityVillage() {
+        if (this.locationObject.getCity() != null) {
             return this.locationObject.getCity();
-        }else if(this.locationObject.getVillage() != null){
+        } else if (this.locationObject.getVillage() != null) {
             return this.locationObject.getVillage();
-        }else if(this.locationObject.getMunicipality() != null){
+        } else if (this.locationObject.getMunicipality() != null) {
             return this.locationObject.getMunicipality();
-        }else if(this.locationObject.getCounty() != null){
+        } else if (this.locationObject.getCounty() != null) {
             return this.locationObject.getCountry();
-        }return null;
+        }
+        return null;
     }
 
     //get information about who take the photo
-    private String owner(){
-        if(this.photoObject.getOwnerName() != null){
+    private String owner() {
+        if (this.photoObject.getOwnerName() != null) {
             return this.photoObject.getOwnerName();
-        } else if(this.photoObject.getHostComputer() != null){
+        } else if (this.photoObject.getHostComputer() != null) {
             return this.photoObject.getHostComputer();
-        } else if(this.photoObject.getCameraModel() != null){
+        } else if (this.photoObject.getCameraModel() != null) {
             return this.photoObject.getCameraModel();
-        }else if(this.photoObject.getBodySerialNumber()  != null){
+        } else if (this.photoObject.getBodySerialNumber() != null) {
             return this.photoObject.getBodySerialNumber();
-        }return null;
+        }
+        return null;
     }
 
     //get time 2024.3.24(20.16.6) by date
-    private String timeFormat(){
+    private String timeFormat() {
         String dateFormat = String.format("%s.%s.%s(%s.%s.%s)",
                 this.photoObject.getDateTime().getYear(),
                 this.photoObject.getDateTime().getMonthValue(),
@@ -109,48 +112,50 @@ public class ModifyPhoto implements Verifications, Modification {
                 this.photoObject.getDateTime().getHour(),
                 this.photoObject.getDateTime().getMinute(),
                 this.photoObject.getDateTime().getSecond());
-        return String.format("%s",dateFormat);
+        return String.format("%s", dateFormat);
     }
 
     //get house number format: 265-89b
-    private String houseNumber(){
-        if (this.locationObject.getHouse_number() != null){
+    private String houseNumber() {
+        if (this.locationObject.getHouse_number() != null) {
             return this.locationObject.getHouse_number().replace("/", "-");
-        }return this.locationObject.getHouse_number();
+        }
+        return this.locationObject.getHouse_number();
     }
 
     //get if the position is in Shop or touristic place
-    private String shopTourism(){
-        if (this.locationObject.getTourism() != null){
+    private String shopTourism() {
+        if (this.locationObject.getTourism() != null) {
             return this.locationObject.getTourism();
-        }if (this.locationObject.getShop() != null){
+        }
+        if (this.locationObject.getShop() != null) {
             return this.locationObject.getShop();
-        }return null;
+        }
+        return null;
     }
 
     //get finally name if coordinates are not null
-    private String getFileLocatedName(){
+    private String getFileLocatedName() {
         return String.format("%s%s%s%s%s",
                 timeFormat(),
-                shopTourism() == null ? "" : String.format(" %s",shopTourism()),
-                owner() == null ? "" : String.format(" (%s)",owner()),
+                shopTourism() == null ? "" : String.format(" %s", shopTourism()),
+                owner() == null ? "" : String.format(" (%s)", owner()),
                 isArrayEmpty(addressDetails()) ? "" : String.format(" in [%s]", address()),
-                getExtension());
+                getExtension()==null?".jpg": "."+getExtension());
     }
 
-    private String[] addressDetails(){
-        return new String[] {cityVillage(), this.locationObject.getRoad(), houseNumber(), this.locationObject.getCountry()};
+    private String[] addressDetails() {
+        return new String[]{cityVillage(), this.locationObject.getRoad(), houseNumber(), this.locationObject.getCountry()};
     }
 
-    private String address(){
+    private String address() {
         String address = "";
         for (int i = 0; i < addressDetails().length; i++) {
-            if(addressDetails()[i] == null){
+            if (addressDetails()[i] == null) {
                 address += "";
-            }
-            else if (addressDetails()[i] != null && i < addressDetails().length - 1) {
+            } else if (addressDetails()[i] != null && i < addressDetails().length - 1) {
                 address += addressDetails()[i] + ", ";
-            } else{
+            } else {
                 address += addressDetails()[addressDetails().length - 1];
             }
         }
@@ -158,36 +163,46 @@ public class ModifyPhoto implements Verifications, Modification {
     }
 
     //get extension of file
-    private String getExtension(){
-        String pathName = this.photoObject.getImagePath().toString();
+    private String getExtension() {
+        String pathName = this.photoObject.getImagePath().getFileName().toString();
         int lastDot = pathName.lastIndexOf(".");
-        if(lastDot != -1){
-            return pathName.substring(lastDot).toLowerCase();
-        }return "jpg";
+        if (lastDot > 0 && lastDot < pathName.length() -1) {
+            return pathName.substring(lastDot + 1).toLowerCase();
+        } return null;
     }
 
     //get finally name if coordinates are null
-    private String getFileUnplacedName(){
-        return String.format("%s%s%s",
+    private String getFileUnplacedName() {
+        return String.format("%s%s%s%s",
                 timeFormat(),
-                owner() == null ? "" : String.format("-%s",owner()),
-                getExtension());
+                owner() == null ? "" : String.format("-%s", owner()),
+                subFolderName() == null ? "" : String.format("-(%s)", subFolderName()),
+                getExtension() == null? ".jpg": "."+getExtension());
     }
 
-    private String getFileScannerName(){
-        return String.format("%s%s%s",
+    private String getFileScannerName() {
+        return String.format("%s%s%s%s",
                 timeFormat(),
-                owner() == null ? "" : String.format("-%s",owner()),
-                subFolder(),
-                getExtension());
+                owner() == null ? "" : String.format("-%s", owner()),
+                subFolderName() == null ? "" : String.format("-(%s)", subFolderName()),
+                getExtension() == null? ".jpg": "."+ getExtension());
     }
 
-    private String subFolder(){
-        return getSubFoldersOfPath()[getSubFoldersOfPath().length-2];
+    public String subFolderName() {
+        if (pathToParts().length > 2) {
+            return pathToParts()[pathToParts().length - 2];
+        }
+        return null;
     }
 
+    private String[] pathToParts() {
+        String[] pathParts = new String[this.photoPath.getNameCount()];
+        for (int i = 0; i < this.photoPath.getNameCount(); i++) {
+            pathParts[i] = this.photoPath.getName(i).toString();
+        }
+        return pathParts;
+    }
 
-    //Generate path from two strings[]
     private Path fileDestinationPath(String[] sourceSubDirectories){
         String filePath = "";
         for (int i = 0; i < sourceSubDirectories.length; i++) {
@@ -209,7 +224,7 @@ public class ModifyPhoto implements Verifications, Modification {
                 this.targetDirectory.toString(),
                 String.valueOf(getYear()),
                 getSeason(),
-                "unplaced",
+                subFolderName() == null? "unplaced": subFolderName(),
                 getFileUnplacedName()};
     }
 
@@ -217,6 +232,7 @@ public class ModifyPhoto implements Verifications, Modification {
         return new String[] {
                 this.targetDirectory.toString(),
                 "Scanned",
+                subFolderName(),
                 getFileScannerName()};
     }
 
@@ -309,7 +325,6 @@ public class ModifyPhoto implements Verifications, Modification {
         fileExplorer.getListOfPhotosFiles().forEach(photo ->{
             ModifyPhoto modifyPhoto = new ModifyPhoto(photo);
             modifyPhoto.copyFile();
-            locationServices.saveToDB();
         });
     }
 }
